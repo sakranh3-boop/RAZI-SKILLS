@@ -7,6 +7,7 @@ mode: true
 # ⚡ BATTLE ORDER — MULTI-PASS NUCLEAR FIX PROTOCOL ⚡
 # When MEDIC is a scalpel, BATTLE ORDER is a surgical battalion.
 # AUTHORITY: The Architect | MODE: MAXIMUM AGGRESSION
+# SYSTEM: RAZI AGI | INTRADAY ONLY | M5 data → M30 execution → H4 confirmation
 
 ════════════════════════════════════════════════════════════════
 WHEN TO USE BATTLE ORDER vs MEDIC:
@@ -172,6 +173,49 @@ grep "trade#\|LEARN COMPLETE" /path/to/brain/logs/ | tail -20
 ```
 EXPECTED: All 5 symbols have trades. No symbol stuck at 0.
 
+### Investigation G: Elliott Wave Taxonomy Complete?
+```bash
+# 23 labels, 12 forms, 8 heads — all present?
+grep -c "IMP_W\|DIAG_\|CORR_\|TRI_\|CMPLX_" launchers/start_brain.py
+grep -c "FORM_IMPULSE\|FORM_LEADING\|FORM_ENDING\|FORM_ZIGZAG\|FORM_FLAT\|FORM_TRIANGLE" launchers/start_brain.py
+# Cross-TF matrix active?
+grep -n "cross_tf_matrix\|_build_cross_tf" launchers/start_brain.py | head -5
+# Wave drawer pipeline?
+grep -n "WAVE_DRAW\|WAVE_CORRECT" launchers/start_brain.py | head -5
+```
+EXPECTED: 23+ labels, 12 forms, cross-TF matrix, wave drawer.
+
+### Investigation H: Protocol Conflicts — Zero Contradictions!
+```bash
+# Early exit vs HOLD — do they conflict?
+grep -n "early_exit\|protect_profit\|trailing" launchers/start_brain.py | head -10
+grep -n "HOLD\|BLOCKED\|CONF_GATE" launchers/start_brain.py | head -10
+
+# Commission handling — not phantom profits?
+grep -n "commission\|spread\|slippage" launchers/start_brain.py | head -10
+
+# Direction alignment — all pointing same way?
+grep -n "wdf.*direction\|universe.*direction\|compass.*direction\|elliott.*direction" launchers/start_brain.py | head -10
+
+# No double penalties
+grep -n "confidence.*\*=.*0\.\|confidence.*-=" launchers/start_brain.py | head -20
+```
+EXPECTED: Early exit active, commissions included, directions aligned, no stacking.
+
+### Investigation I: Feynman Path Integral — God's Card Active?
+```bash
+# Does ElliottGRU output PROBABILITY DISTRIBUTION (softmax 23)?
+grep -n "softmax.*23\|wave_probabilities\|path_integral" launchers/start_brain.py | head -10
+
+# Is there a certainty gate? P(first) - P(second) > threshold?
+grep -n "certainty\|prob_gap\|first.*second\|wave_certainty" launchers/start_brain.py | head -10
+
+# Does self-correction happen automatically (no forced recount)?
+grep -n "recount\|force_count\|manual.*count" launchers/start_brain.py | head -10
+```
+EXPECTED: Full softmax over 23. Certainty gate active. No forced recounts.
+THE KEY: If system outputs argmax without certainty check → it's GAMBLING, not TRADING.
+
 ### Deep Root Report
 ```
 Investigation A: WORKING / BROKEN → [details]
@@ -180,6 +224,9 @@ Investigation C: HEALTHY / WRONG TARGETS → [details]
 Investigation D: HEALTHY / ×0 FOUND → [details]
 Investigation E: UPDATING / FROZEN → [details]
 Investigation F: ALL LEARNING / STUCK: [list] → [details]
+Investigation G: TAXONOMY COMPLETE / INCOMPLETE → [details]
+Investigation H: ZERO CONFLICTS / [list of conflicts] → [details]
+Investigation I: FEYNMAN ACTIVE (probability+certainty) / SINGLE-COUNT (gambling!) → [details]
 ```
 **If ANY is BROKEN → fix it NOW before PASS 2.**
 
@@ -294,6 +341,102 @@ AFTER: [State after]"
 
 git tag -a "ERA-VX.XX-[OPERATION_NAME]" -m "[Quantum Monolith message]"
 git push origin main --tags
+```
+
+---
+
+## ADDING NEW IRON LAW — 11-STEP MILITARY CHECKLIST
+
+When BATTLE ORDER includes adding a new Iron Law (IL#196+), follow EVERY step:
+
+```
+STEP 1:  CLASS — nn.Module with layers + LayerNorm + Dropout(0.1)
+STEP 2:  COSMOS — 5 dicts at module level: net, optimizer, shadow, result, accuracy
+STEP 3:  FACTORY — _get_or_create_xxx(symbol) with Adam(lr=0.001, weight_decay=0.001)
+STEP 4:  FEATURES — Extract from enriched_features (ZERO price thresholds! Energy only!)
+STEP 5:  PROCESS — Called from process_features(). torch.no_grad(). Returns dict with WHY.
+STEP 6:  TRAIN — Called from process_trade_result(). backward + clip_grad_norm_(1.0) + step
+STEP 7:  WIRE ×3 — Insert into: process_features + make_ultimate_decision + process_trade_result
+STEP 8:  V45 SAVE — Add to save_weights: state_dict + optimizer + shadow counter
+STEP 9:  V45 LOAD — SYMMETRIC to save! load_state_dict + restore shadow
+STEP 10: REGISTRY — Add to registry list + update DNA chain count
+STEP 11: DOCS ×6 — CLAUDE.md + VAULT + OMNI + FLIGHT + CORTEX + GOLD
+
+**ELLIOTT WAVE EXPANSION (if IL touches Elliott):**
+```
+STEP E1: Expand wave labels if new pattern discovered (23 → 24+)
+STEP E2: Update Energy Signature Matrix (32D vector for new form)
+STEP E3: Add cross-TF correlation rule for new wave type
+STEP E4: Update Wave Drawer color/style table for new label
+STEP E5: Add Human-in-the-Loop training case for new pattern
+STEP E6: Verify backward compatibility (23→9 group mapping still works)
+STEP E7: Update ELLIOTT_WAVE_UNIVERSE_ENCYCLOPEDIA_V2.md
+```
+
+**PROTOCOL CONFLICT CHECK (mandatory for ALL new Iron Laws):**
+```
+CHECK P1: Does this IL conflict with any existing IL? (grep for same vars)
+CHECK P2: Does this IL affect confidence? If yes — bounds check [0.3, 2.0]
+CHECK P3: Does this IL affect direction? If yes — must align with IL#158
+CHECK P4: Does this IL affect SL/TP? If yes — STEEL protection check
+CHECK P5: Does this IL affect INTRADAY pipeline? M5→M30→H4 must stay sacred
+CHECK P6: Are commissions/spread considered in any profit calculations?
+CHECK P7: Does this IL respect Feynman Path Integral? Wave outputs must be
+          PROBABILITY DISTRIBUTIONS (softmax), never single argmax without
+          certainty gate. If certainty < φ_g_inverse → system must WAIT.
+```
+```
+
+**V45 SAVE/LOAD SYMMETRY — The Invisible Killer:**
+If save has 5 fields but load reads 4 → one field LOST on restart.
+If load expects a field that save doesn't write → crash on restart.
+```bash
+# Verify symmetry after adding new system:
+grep "weights\[.il${NEW_IL}" launchers/start_brain.py | wc -l  # save count
+grep "weights.get(.il${NEW_IL}\|_ll_${NEW_IL}" launchers/start_brain.py | wc -l  # load count
+# MUST be equal!
+```
+
+---
+
+## BRAIN ANATOMY — Current Vital Signs
+
+```
+INTRADAY SYSTEM: M5 data collection → M30 trade execution → H4 trend confirmation
+Brain:           launchers/start_brain.py (~35,400 lines)
+Classes:         38 nn.Module subclasses
+Functions:       445+
+Iron Laws:       195 (IL#1-195) + 3 Master Laws + 1 reserved = 199 DNA
+COSMOS Dicts:    134 (_*_by_symbol per-symbol isolation)
+Learning:        27 systems (all BPTT on every trade close)
+DL Architectures: 14 (TransformerXL, KAN, Mamba, GNN, RWKV, etc.)
+AI Agents:       11 (soft modifiers ±3-5%)
+Protocols:       48 (P1-P48)
+Symbols:         5 (XAUUSD#, NAS100#, US30#, GBPUSD#, EURUSD#)
+```
+
+**3 MOST CRITICAL FUNCTIONS — breaking these kills the organism:**
+```
+process_features()         → Steps 1-8.5 → enriched_features
+make_ultimate_decision()   → IL#158 PRIMARY → signal
+process_trade_result()     → 27 learning system updates
+```
+
+---
+
+## XAGI MANIFESTO — 6 Laws of the Living Organism
+
+Every BATTLE ORDER fix must satisfy ALL 6:
+```
+LAW 1: NO ZEROS     — Data always flows. Epsilon guards everywhere.
+LAW 2: EVERY = AI   — WHY dict on every decision function.
+LAW 3: SELF-CORRECT — BPTT fires on every trade close for ALL 27 systems.
+LAW 4: NO DICTATORS — IL#158 PRIMARY, everything else modulates ±3-6%.
+LAW 5: DEATH STATIC — No hardcoded 1.618/0.618 in decisions. PHI_GRAVITY dynamic.
+LAW 6: XAGI ARMOR   — Intelligence IS the shield. No external safety overrides.
+LAW 7: FEYNMAN PATH — The wave is ALL labels simultaneously. Output probabilities,
+       not single answers. Trade ONLY when the universe has decided (certainty > φ_inv).
+       Self-correction is natural — probabilities shift every bar.
 ```
 
 ---

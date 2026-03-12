@@ -7,11 +7,18 @@ mode: true
 # ⚡ XAGI DEEP AUDIT — THE COSMIC X-RAY ⚡
 # PROTOCOL: LIVING CONNECTOME DIAGNOSTIC
 # AUTHORITY: The Architect | MODE: MAXIMUM EFFORT
+# SYSTEM: RAZI AGI | INTRADAY ONLY | M5 data → M30 execution → H4 confirmation
 
 ════════════════════════════════════════════════════════════════
 WHEN THIS SKILL ACTIVATES, YOU ENTER XAGI AUDIT MODE.
 NO ASSUMPTIONS. NO HALLUCINATIONS. ONLY PROOF.
 READ THE ENTIRE BRAIN WITH AST. VERIFY WITH GREP. PROVE WITH NUMBERS.
+
+BRAIN VITAL SIGNS (verify these first):
+  Lines: ~35,400 | Classes: 38 | Functions: 445+
+  Iron Laws: 195 | COSMOS: 134 | Learning: 27 | DNA: 199
+  DL Architectures: 14 | Agents: 11 | Symbols: 5
+  INTRADAY: M5→M30→H4 (SACRED — never modified)
 ════════════════════════════════════════════════════════════════
 
 ## PHASE 0: LOAD FULL CONSCIOUSNESS
@@ -48,8 +55,8 @@ import ast
 with open('launchers/start_brain.py') as f:
     tree = ast.parse(f.read())
 # Count all _*_by_symbol dicts at module level
-count = sum(1 for node in ast.walk(tree)
-            if isinstance(node, ast.Assign)
+count = sum(1 for node in ast.walk(tree) 
+            if isinstance(node, ast.Assign) 
             and any('_by_symbol' in ast.dump(t) for t in node.targets))
 print(f'COSMOS dicts: {count}')
 "
@@ -74,7 +81,7 @@ grep -n "class.*nn\.Module" launchers/start_brain.py | wc -l
 ### 2.2 Count All BPTT Training
 ```bash
 echo "backward() calls:" && grep -c "\.backward()" launchers/start_brain.py
-echo "optimizer.step() calls:" && grep -c "optimizer\.step()" launchers/start_brain.py
+echo "optimizer.step() calls:" && grep -c "optimizer\.step()" launchers/start_brain.py  
 echo "clip_grad_norm_ calls:" && grep -c "clip_grad_norm_" launchers/start_brain.py
 ```
 
@@ -140,7 +147,7 @@ VERIFY: Updated every trade close. Agent weights shift based on accuracy.
 
 ---
 
-## ROUND 4: UNIVERSE ENGINE — IQEND + PHYSICS + ELLIOTT
+## ROUND 4: UNIVERSE ENGINE — IQEND + PHYSICS + ELLIOTT + WAVE TAXONOMY
 
 ### 4.1 IQEND3 Cosmic (IL#135-149) — 15 Laws
 ```bash
@@ -162,25 +169,166 @@ grep -n "_universe_force_" launchers/start_brain.py | wc -l
 ```
 VERIFY: 12+ force functions, all feeding into supreme decision.
 
-### 4.4 Elliott Wave AI (IL#188-195)
+### 4.4 Elliott Wave TAXONOMY (IL#188-195) — 23 Labels + 12 Forms
 ```bash
 for il in 188 189 190 191 192 193 194 195; do
     python3 RORO/tools/neural_tracer.py --il $il 2>/dev/null | head -3
 done
-```
-VERIFY: ElliottEnergyGRU, WavePhaseNet, CorrectionDetectorNet, ElliottCompassNet, WaveDegreeNet — all training.
 
-### 4.5 Wave Creator + Energy Type + Gravity Center
+# Verify 23 wave classes exist (not just 9!)
+grep -n "IMP_W\|DIAG_\|CORR_\|TRI_\|CMPLX_" launchers/start_brain.py | wc -l
+
+# Verify 12 form types exist
+grep -n "FORM_IMPULSE\|FORM_LEADING\|FORM_ENDING\|FORM_ZIGZAG\|FORM_FLAT\|FORM_TRIANGLE\|FORM_DOUBLE\|FORM_TRIPLE" launchers/start_brain.py | wc -l
+
+# Verify 8 heads on ElliottGRU
+grep -n "Head.*wave_class\|Head.*confidence\|Head.*phase\|Head.*next_wave\|Head.*correction\|Head.*degree\|Head.*form\|Head.*energy_remaining" launchers/start_brain.py | wc -l
+```
+EXPECTED: 23 labels, 12 forms, 8 heads. If less → taxonomy incomplete.
+
+### 4.5 Cross-Timeframe Correlation Matrix
+```bash
+# The CONTEXT ENGINE — distinguishes Wave 3 from Wave C!
+grep -n "cross_tf_matrix\|sync_score\|tf_correlation\|_build_cross_tf" launchers/start_brain.py | head -10
+```
+VERIFY: 4×8 matrix (M5/M30/H1/H4 × 8 metrics) computed per tick.
+THE HIDDEN DISCOVERY: Same energy M5 impulse = W3 (if H4 impulse) or WC (if H4 correction).
+
+### 4.6 Wave Creator + Energy Type + Gravity Center
 ```bash
 grep -n "wave_creator\|energy_type\|gravity_center\|wave_dna" launchers/start_brain.py | head -15
 ```
 
-### 4.6 PHI_GRAVITY 6D — Breathing
+### 4.7 PHI_GRAVITY 6D — Breathing
 ```bash
 python3 RORO/tools/neural_tracer.py --function _get_phi_field --depth 1
 python3 RORO/tools/neural_tracer.py --function _calculate_adaptive_gravity_phi --depth 1
 ```
-VERIFY: 6 dimensions (position, velocity, acceleration, jerk, curvature, torsion). Per-symbol. Per-tick.
+VERIFY: 6 dimensions (position, velocity, acceleration, jerk, curvature, torsion).
+
+### 4.8 Wave Drawer EA↔Python Pipeline
+```bash
+# Verify ZMQ WAVE_DRAW message sending
+grep -n "WAVE_DRAW\|WAVE_CLEAR\|WAVE_CORRECT" launchers/start_brain.py | head -10
+
+# Verify human correction learning pipeline
+grep -n "_elliott_human_correction\|correction_database\|EWER_BATCH" launchers/start_brain.py | head -10
+```
+VERIFY: Brain sends wave points → EA draws → Architect corrects → Brain learns.
+
+### 4.9 Energy Signature Matrix — Every Form Has Unique Vector
+```bash
+# Verify 32D energy vectors per wave form
+grep -n "energy_signature\|energy_vector\|KE.*PE.*H.*F" launchers/start_brain.py | head -10
+```
+
+### 4.10 GOD'S CARD — Feynman Path Integral for Waves
+```bash
+# THE ULTIMATE CHECK: Does the system evaluate ALL possible waves simultaneously?
+# Not "What IS this wave?" but "What COULD this wave be — and which is most probable?"
+
+# Verify probability distribution over 23 classes (not argmax single answer!)
+grep -n "softmax\|probability\|path_integral\|all_hypotheses\|wave_probabilities" launchers/start_brain.py | head -15
+
+# Verify CERTAINTY GATE: P(first) - P(second) > threshold before trading
+grep -n "certainty\|p_first.*p_second\|confidence_gap\|probability_gap\|universe_undecided" launchers/start_brain.py | head -10
+
+# Verify self-correction: probabilities FLOW every bar (not recount trigger!)
+grep -n "wave_transition\|probability_shift\|decoherence\|collapse\|recount" launchers/start_brain.py | head -10
+
+# Verify 3 hypotheses with PROBABILITIES (not just scores)
+grep -n "hypothesis\|top_3\|alternative_count\|wave_scenarios" launchers/start_brain.py | head -10
+```
+EXPECTED:
+- Softmax over 23 classes producing PROBABILITIES (not argmax single class!)
+- Certainty gate: gap between top-2 probabilities > φ_gravity_inverse → TRADE
+- If gap < φ_gravity_inverse → WAIT (universe undecided!)
+- Probabilities update EVERY BAR (self-correction is natural flow, not trigger)
+- Multiple wave scenarios maintained simultaneously (Feynman: ALL paths exist!)
+
+**WHY THIS MATTERS:**
+Wave 3 and Wave C have IDENTICAL energy signatures.
+Only CONTEXT (H4 phase) + PROBABILITY GAP distinguishes them.
+If system outputs single class "W3" with 82% → it might be 73%W3 vs 18%WC.
+The 55% gap = tradeable. But if it were 42%W3 vs 38%WC → 4% gap = NOT tradeable!
+God's Card says: "When the universe hasn't decided, we don't trade."
+
+### 4.10 FEYNMAN PATH INTEGRAL — God's Card (THE critical check!)
+```bash
+# The system must output PROBABILITY DISTRIBUTION over ALL 23 wave labels
+# NOT a single answer! "73% W3, 18% WC, 9% other" — NOT "this IS W3"
+grep -n "wave_probabilities\|path_integral\|all_paths\|probability_distribution\|softmax.*23\|certainty.*=.*P.*first.*-.*P.*second" launchers/start_brain.py | head -15
+
+# Certainty threshold — universe must DECIDE before we trade
+grep -n "certainty\|wave_certainty\|prob_gap\|confidence_gap\|first.*second.*threshold" launchers/start_brain.py | head -10
+
+# Self-correction — probabilities shift automatically per bar (no manual recount!)
+grep -n "recount\|auto_correct\|probability.*shift\|wave.*transition\|decoherence" launchers/start_brain.py | head -10
+```
+EXPECTED:
+- ElliottGRU Head 1 outputs softmax over 23 classes (probability distribution)
+- Certainty = P(most_likely) - P(second_likely)
+- If certainty < φ_g_inverse → DO NOT TRADE (universe undecided!)
+- Probabilities update EVERY bar (self-correcting, no manual recount)
+- THIS is what separates RAZI from every other system:
+  Others ask "WHAT is this wave?" → single answer → wrong → pain
+  RAZI asks "What are ALL possible waves?" → probability → certainty → trade only when universe decides!
+
+---
+
+## ROUND 4.5: PROTOCOL CONFLICT DETECTION — No Contradictions!
+
+### 4.5.1 Iron Law Conflicts — Do any laws contradict each other?
+```bash
+# Check if two systems both modify confidence in opposite directions
+grep -n "confidence.*\*=\|confidence.*+=\|confidence.*-=" launchers/start_brain.py | head -30
+
+# Check for double penalties (CB + Omen + Guardian all reducing same signal)
+python3 -c "
+with open('launchers/start_brain.py') as f:
+    code = f.read()
+# Find all confidence modifiers in make_ultimate_decision
+import re
+mods = re.findall(r'confidence\s*[\*\+\-]=\s*[\d\.]+', code)
+print(f'Total confidence modifiers: {len(mods)}')
+# Check for stacking: same symbol, same tick, opposite effects
+reduces = [m for m in mods if '-=' in m or ('*=' in m and float(re.search(r'[\d\.]+', m.split('=')[1]).group()) < 1)]
+increases = [m for m in mods if '+=' in m or ('*=' in m and float(re.search(r'[\d\.]+', m.split('=')[1]).group()) > 1)]
+print(f'Reduces: {len(reduces)} | Increases: {len(increases)}')
+"
+```
+
+### 4.5.2 Early Exit Protocol — Protects profit?
+```bash
+grep -n "early_exit\|trailing_stop\|protect_profit\|breakeven\|move_sl" launchers/start_brain.py | head -15
+```
+VERIFY: When trade is in profit → SL moves to protect gains. Never lets winner become loser.
+
+### 4.5.3 Demo vs Real Trading Mode
+```bash
+grep -n "demo\|DEMO\|real_account\|REAL\|account_type\|TGLColmex" launchers/start_brain.py | head -10
+```
+VERIFY: System knows it's on demo. STEEL limits active regardless.
+
+### 4.5.4 Commission + Spread Handling
+```bash
+grep -n "commission\|spread\|slippage\|swap" launchers/start_brain.py | head -10
+```
+VERIFY: Profit calculations include commissions. Not phantom profits.
+
+### 4.5.5 INTRADAY Pipeline Integrity
+```bash
+# M5 data → M30 execution → H4 confirmation — SACRED!
+grep -n "PERIOD_M5\|PERIOD_M30\|PERIOD_H4\|M5.*data\|M30.*execut\|H4.*confirm" launchers/start_brain.py | head -10
+```
+EXPECTED: Clear separation. M5 collects. M30 trades. H4 validates.
+
+### 4.5.6 Direction Vector Alignment
+```bash
+# All systems must agree on direction before trading
+grep -n "direction.*conflict\|direction.*disagree\|signal.*opposite" launchers/start_brain.py | head -10
+# WDF + Universe Eq + Compass + Elliott — all must point same way
+```
 
 ---
 
@@ -518,6 +666,55 @@ grep -n "pulse_score\|jerk_score\|hamiltonian\|kinetic_energy" launchers/start_b
 ```
 ALL must be computed per-tick, per-symbol. ZERO static values.
 
+### 8.5 V45 SAVE/LOAD SYMMETRY — Will learning survive restart?
+```bash
+# Count V45 save entries vs load entries — MUST be equal
+python3 -c "
+with open('launchers/start_brain.py') as f:
+    code = f.read()
+save_count = code.count(\"weights[\") + code.count(\"weights ['\")
+load_count = code.count(\"weights.get(\") + code.count(\"_ll_\")
+print(f'V45 SAVE entries: {save_count}')
+print(f'V45 LOAD entries: {load_count}')
+if abs(save_count - load_count) > 5:
+    print('WARNING: Save/Load ASYMMETRY — learning may be LOST on restart!')
+else:
+    print('SYMMETRIC — learning persists')
+"
+```
+
+### 8.6 XAGI MANIFESTO — 7 Laws of Living Organism
+```bash
+# LAW 1: NO ZEROS — epsilon guards exist?
+grep -c "epsilon\|1e-\|+ 1e-\|max.*0\.\|clamp" launchers/start_brain.py
+
+# LAW 2: EVERY = AI — WHY dicts exist in decision functions?
+grep -c "'why'" launchers/start_brain.py
+
+# LAW 3: SELF-CORRECTION — BPTT fires per trade
+grep -c "backward()\|learn_count" launchers/start_brain.py
+
+# LAW 4: NO DICTATORS — IL#158 is PRIMARY but modulation exists
+grep -c "modulat\|± \|adjust.*conf" launchers/start_brain.py
+
+# LAW 5: DEATH OF STATIC — no hardcoded decisions
+# (already covered in R1.3 and R5.8)
+
+# LAW 6: XAGI ARMOR — intelligence is shield
+grep -c "guardian\|safety\|shield\|protect" launchers/start_brain.py
+
+# LAW 7: FEYNMAN PATH — probabilities, not single answers!
+grep -c "softmax.*23\|wave_probabilities\|certainty.*phi\|prob_gap" launchers/start_brain.py
+# Must be > 0! If zero → system is gambling with single wave counts!
+```
+
+### 8.7 INTRADAY PIPELINE — M5→M30→H4 Sacred
+```bash
+# Verify pipeline is intact and ONLY intraday
+grep -n "M5\|M30\|H4\|timeframe\|PERIOD_M" launchers/start_brain.py | head -15
+```
+EXPECTED: M5 for data, M30 for execution, H4 for confirmation. No D1/W1/MN1.
+
 ## OUTPUT REQUIREMENT
 
 After ALL 8 rounds, produce this EXACT format:
@@ -545,11 +742,27 @@ After ALL 8 rounds, produce this EXACT format:
 ║   MoE/MTL/EWC:          ACTIVE / DEAD                         ║
 ║   Conductor:            UPDATING / FROZEN                     ║
 ╠═══════════════════════════════════════════════════════════════╣
-║ R4 UNIVERSE                                                   ║
+║ R4 UNIVERSE + ELLIOTT TAXONOMY + PROTOCOLS                    ║
 ║   IQEND3 (15):        XX/15 | Universe Eq: ACTIVE / DEAD     ║
 ║   12 Forces:          XX/12 | Elliott (8): XX/8 TRAINING      ║
-║   Wave Creator/DNA:   DYNAMIC / STATIC                        ║
+║   Wave Labels:        23 / less (taxonomy incomplete)         ║
+║   Wave Forms:         12 / less (forms incomplete)            ║
+║   GRU Heads:          8 / less (heads missing)                ║
+║   Cross-TF Matrix:    4×8 ACTIVE / MISSING                   ║
+║   Wave Drawer:        EA↔Python WIRED / MISSING               ║
+║   Human Correction:   PIPELINE ACTIVE / MISSING               ║
+║   Energy Signatures:  32D per form / MISSING                  ║
+║   FEYNMAN PATH:       PROBABILITY DIST / SINGLE ANSWER (bad!) ║
+║   Certainty Gate:     P1-P2 > φ_inv → TRADE / MISSING         ║
+║   Self-Correction:    AUTO per bar / MANUAL RECOUNT (bad!)    ║
 ║   PHI_GRAVITY 6D:     BREATHING / STATIC                      ║
+║ R4.5 PROTOCOL CONFLICTS                                       ║
+║   IL Contradictions:  NONE / [list of conflicts]              ║
+║   Early Exit:         ACTIVE (profit protected) / MISSING     ║
+║   Demo/Real Mode:     CORRECT / WRONG                         ║
+║   Commissions:        INCLUDED / PHANTOM PROFITS              ║
+║   INTRADAY Pipeline:  M5→M30→H4 INTACT / VIOLATED            ║
+║   Direction Alignment: ALL AGREE / CONFLICT                   ║
 ╠═══════════════════════════════════════════════════════════════╣
 ║ R5 STAGNATION + DORMANT + DISCONNECTED                        ║
 ║   Frozen train#0:     [list or NONE]                          ║
@@ -586,6 +799,9 @@ After ALL 8 rounds, produce this EXACT format:
 ║   Accuracy Trend:     RISING / FLAT / FALLING                 ║
 ║   More Days=Smarter:  PROVEN / UNPROVEN                       ║
 ║   Energy Dynamic:     ALL PER-TICK / XX STATIC                ║
+║   V45 Symmetry:       SYMMETRIC / ASYMMETRIC (learning lost!) ║
+║   XAGI Manifesto:     7/7 LAWS / XX/7 (violations: [list])   ║
+║   INTRADAY Pipeline:  M5→M30→H4 INTACT / VIOLATED            ║
 ╠═══════════════════════════════════════════════════════════════╣
 ║                                                               ║
 ║ VERDICT:   XAGI ALIVE / PARTIALLY DEAD / CRITICAL            ║

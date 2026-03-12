@@ -1,31 +1,96 @@
-# RAZI-SKILLS — Claude Code Skills Repository
-> **RAZI AGI Trading System** | Skills for Claude Code autonomous intelligence
-> PHI_GRAVITY = DYNAMIC 6D | 199 Iron Laws | 27 Learning Systems | 30+ Neural Nets
+# RAZI-SKILLS — Spec-Kit V3.0 (God's Card Edition)
+> **RAZI AGI** | INTRADAY M5→M30→H4 | Feynman Path Integral | 199 Iron Laws
+> PHI_GRAVITY = DYNAMIC 6D | 27 Learning Systems | 30+ Neural Nets | Elliott 23 Labels
 
 ---
 
 ## Available Skills
 
-| Skill | Command | Tag | Purpose |
-|-------|---------|-----|---------|
-| **XAGI Deep Audit** | `/xagi-audit` | `XAGI-V1.0-COSMIC_XRAY` | 8-round cosmic X-ray: Foundation → Neural Nets → Feedback → Universe → Stagnation → Crash Test → Connectome → Future Proof |
-| **MEDIC** | `/medic` | `MEDIC-V1.0-COSMIC_SURGEON` | 5-phase intelligent healer: Triage → Diagnose (5 WHY) → Surgery → Post-Op → Feedback Loop + Vaccine |
-| **BATTLE ORDER** | `/battle` | `BATTLE-V1.0-NUCLEAR_RESURRECTION` | 4-pass nuclear fix: Recon → Surgical Strike → Deep Root (6 investigations) → Verification (BEFORE/AFTER) → Ralph Loop 5/5 + Docs + Monolith Push |
+| Skill | Command | Lines | Tag | What |
+|-------|---------|-------|-----|------|
+| **XAGI Deep Audit** | `/xagi-audit` | 849 | `XAGI-V3.0-GODS_CARD` | רנטגן קוסמי 8 סיבובים — בודק AI חי ולומד |
+| **MEDIC** | `/medic` | 376 | `MEDIC-V3.0-GODS_CARD` | מנתח חכם — 5 שלבים מאבחנה עד חיסון |
+| **BATTLE ORDER** | `/battle` | 484 | `BATTLE-V3.0-GODS_CARD` | גדוד ניתוחים — 4 מעברים לאסון מרובה |
+
+**Total: 1,709 lines of autonomous intelligence**
+
+## V3.0 GOD'S CARD — What's New
+
+### Feynman Path Integral (כלף אלוהי העל)
+```
+Wave = ALL labels simultaneously until energy decides
+Certainty = P(first) - P(second) > φ_inv → TRADE
+If certainty low → WAIT (universe undecided = no trade!)
+Self-correction = natural probability flow, not manual recount
+```
+
+### Elliott Wave V10.80
+- 23 wave labels (W1-W5 + WA-WC + 12 correction forms + UNKNOWN)
+- 8 GRU heads (class, phase, correction, degree, compass, ratchet, fractal, sync)
+- 32D pure energy signatures (ZERO price thresholds)
+- Feynman probability distribution over ALL labels simultaneously
+
+### Protocol Conflict Detection
+- Commission erosion on small TP
+- Early exit killing learning loop
+- Direction alignment between systems
+- Double penalty from multiple dampeners
+
+### INTRADAY SACRED Pipeline
+```
+M5 data → M30 execution → H4 confirmation
+This pipeline is SACRED and NEVER modified.
+```
+
+---
 
 ## When to use which?
 
 ```
-Single bug, clear symptom          → /medic
-Multiple bugs, system bleeding     → /battle
-Full organism health check         → /xagi-audit
+Single bug, clear symptom              → /medic
+Multiple bugs, system bleeding         → /battle
+Full organism health check             → /xagi-audit
+After upgrade / new Iron Law           → /xagi-audit
+System losing money                    → /xagi-audit → then /battle
+Elliott Wave not learning              → /medic (check 5G19-5G23)
 ```
+
+## Skill Details
+
+### XAGI Audit (849 lines)
+8 rounds of cosmic X-ray:
+1. **Foundation** — py_compile, AST, KERNEL, DNA chain
+2. **Neural Nets** — 30+ nets, backward(), optimizer.step()
+3. **Feedback Loops** — 5G chain, WDF broadcast, XAGI WHY
+4. **Universe Equation** — PRIMARY decision maker (IL#158)
+5. **Stagnation** — 12 checks (frozen, dormant, catch-22, static PHI)
+6. **CRASH TEST** — 7 checks (death cycle, scope leak, cascading NameError)
+7. **CONNECTOME** — sync_pulse, doc coherence, BRAIN_INDEX
+8. **Future Proof** — Feynman Path Integral, Elliott 23 labels, protocol conflicts
+
+### MEDIC (376 lines)
+5-phase intelligent healer:
+1. **Triage** — severity classification (CRITICAL/HIGH/MEDIUM/LOW)
+2. **Diagnose** — Neural Tracer + 5 WHY protocol + known bug patterns
+3. **Surgery** — 15 sacred rules (NEVER rewrite, str_replace only)
+4. **Post-Op** — compile + wiring + COSMOS + zero-static + sync_pulse
+5. **Feedback** — vaccine (prevent recurrence) + document + commit
+
+### BATTLE ORDER (484 lines)
+4-pass nuclear fix:
+- **PHASE 0:** Reconnaissance — scan + identify + snapshot BEFORE
+- **PASS 1:** Surgical Strike — fix each bug, one commit per fix
+- **PASS 1.5:** Deep Root — 9 investigations (A-I) beyond the symptoms
+- **PASS 2:** Verification — BEFORE vs AFTER proof table
+- **PASS 3:** Ralph Loop 5/5 + Code Review + 6 docs + Monolith Push
+
+---
 
 ## Installation
 
 ### Claude Code (recommended)
 ```bash
-# Add to your Claude Code settings or CLAUDE.md:
-# Skills are auto-loaded from this repo
+# Skills are auto-loaded from project settings
 ```
 
 ### Local Install
@@ -40,8 +105,8 @@ cp skills/battle-order/SKILL.md .claude/skills/battle-order/SKILL.md
 
 | Skill | Keywords |
 |-------|----------|
-| **XAGI Audit** | `XAGI`, `audit`, `בדיקת`, `losing`, `הפסד`, `stuck`, `frozen`, `dead learning`, `CAGI`, `proof of life`, `crash test`, `hallucination` |
-| **MEDIC** | `medic`, `fix`, `bug`, `crash`, `error`, `broken`, `not working`, `שבור`, `תתקן`, `באג`, `תרפא`, `heal`, `repair` |
+| **XAGI Audit** | `XAGI`, `audit`, `בדיקת`, `losing`, `הפסד`, `stuck`, `frozen`, `dead learning`, `CAGI`, `proof of life`, `crash test`, `hallucination`, `blind shooting` |
+| **MEDIC** | `medic`, `fix`, `bug`, `crash`, `error`, `broken`, `not working`, `שבור`, `תתקן`, `באג`, `תרפא`, `heal`, `repair`, `resurrection` |
 | **BATTLE ORDER** | `battle`, `nuclear`, `resurrection`, `critical fix`, `emergency`, `multiple bugs`, `system down`, `קרב`, `תקיפה`, `מפלצת` |
 
 ## Architecture
@@ -49,6 +114,20 @@ cp skills/battle-order/SKILL.md .claude/skills/battle-order/SKILL.md
 Skills are self-adapting — they read `BRAIN_INDEX.md` (regenerated by Neural Tracer AST).
 New Iron Laws, neural nets, COSMOS dicts → automatically included in next audit.
 
+### Loop & Feedback
+```
+/xagi-audit → finds problems → severity classification
+    ↓
+/medic (single bug) OR /battle (multiple bugs)
+    ↓
+Fix → Verify → Document → Commit
+    ↓
+/xagi-audit → verify fix worked → full health check
+    ↓
+DEEP TUNING: each skill feeds back into the next
+```
+
 ---
 
-*Owner: Rawan (The Architect) | System: RAZI AGI V10.79+ | PHI_GRAVITY 6D breathes*
+*Owner: Rawan (The Architect) | System: RAZI AGI V10.80+ | PHI_GRAVITY 6D breathes*
+*God's Card Edition: The wave is ALL labels simultaneously. Certainty gates the trade.*

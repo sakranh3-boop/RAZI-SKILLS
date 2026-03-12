@@ -7,13 +7,60 @@ mode: true
 # 🏥 MEDIC — INTELLIGENT BUG HEALER
 # Not recovery. Not debugging. HEALING from the root.
 # AUTHORITY: The Architect | LOOP: DIAGNOSE → TRACE → FIX → VERIFY → LEARN
+# SYSTEM: RAZI AGI | MODE: INTRADAY ONLY | PIPELINE: M5 data → M30 execution → H4 confirmation
 
 ════════════════════════════════════════════════════════════════
 MEDIC PROTOCOL: "A surgeon who understands the ORGANISM, not just the wound."
 - Recover My Code = bandaid (restores old version)
 - Standard Debug = flashlight (finds the line)
 - MEDIC = fMRI + surgery + post-op + vaccine (heals + prevents)
+
+INTRADAY DECLARATION:
+This system trades INTRADAY ONLY. M5 collects data. M30 executes.
+H4 confirms trend. This pipeline is SACRED and NEVER modified.
 ════════════════════════════════════════════════════════════════
+
+## THE 12 SACRED RULES OF BRAIN SURGERY
+
+Before ANY fix, internalize these rules. Violating ANY = patient death.
+
+```
+RULE 1:  SURGICAL ONLY — str_replace, never rewrite from scratch
+RULE 2:  STEEL PROTECTION — SL/TP ranges, lot sizes, max_positions,
+         max_drawdown are NEVER modified. If fix touches these → STOP.
+RULE 3:  PHI IS DYNAMIC — Never write 1.618 or 0.618 as literal.
+         Always: phi_g = _get_phi_field(symbol)
+RULE 4:  COSMOS ISOLATION — Every per-symbol state = _*_by_symbol dict
+         at module level. Zero cross-contamination between symbols.
+RULE 5:  float64 ALWAYS FOR MONEY — float(np.float64(price)), never float32
+RULE 6:  SHADOW MODE — Every new system starts in shadow (21 trades).
+         Predicts but does NOT affect decisions until graduated.
+RULE 7:  NO DEAD CODE — No pass in except, no orphan functions,
+         no COSMOS dicts with 0 readers, every net needs factory+forward+train+V45
+RULE 8:  UNIVERSE EQUATION IS PRIMARY — IL#158 decides direction.
+         Everything else modulates ±3-6%. Nothing overrides except STEEL.
+RULE 9:  THE WHY ENGINE — Every decision outputs a WHY dict explaining itself
+RULE 10: M5→M30→H4 SACRED PIPELINE — INTRADAY. Never modified.
+RULE 11: GRADIENT SAFETY — clip_grad_norm_(1.0) on ALL nets.
+         GRU: net.hidden = net.hidden.detach() before training.
+RULE 12: DNA CHAIN — After any change, DNA count = IL# + 3 Master + 1 reserved
+RULE 13: ELLIOTT TAXONOMY — 23 wave labels + 12 forms + 8 GRU heads.
+         Wave 3 ≠ Wave C despite same energy! CONTEXT from H4 decides.
+         12,376 possible wave structures — AI evaluates ALL simultaneously.
+RULE 14: NO PROTOCOL CONFLICTS — Before any fix, verify:
+         - No two systems penalize the same signal (double-reduction)
+         - Early exit protects profit (trailing SL moves to breakeven)
+         - Commissions included in profit calculations (not phantom!)
+         - Direction: Universe Eq + WDF + Compass + Elliott must AGREE
+         - INTRADAY ONLY: M5 data, M30 execute, H4 confirm
+RULE 15: FEYNMAN PATH INTEGRAL (GOD'S CARD) — The wave is NOT one label.
+         The wave is ALL labels simultaneously until energy decides.
+         ElliottGRU outputs PROBABILITY DISTRIBUTION (softmax 23).
+         Certainty = P(first) - P(second).
+         If certainty < φ_g_inverse → DO NOT TRADE. Universe undecided.
+         Self-correction is AUTOMATIC (probabilities shift per bar).
+         NEVER force a single wave count. Let probabilities flow.
+```
 
 ## PHASE 1: TRIAGE — What hurts?
 
@@ -96,6 +143,33 @@ CHECK: grep "varname.*= True" to see if the flag ever activates
 
 PATTERN: STATIC PHI GHOST — hardcoded 1.618 instead of _phi_g(sym)
 CHECK: grep "1\.618" in the affected area
+
+PATTERN: WAVE 3 vs WAVE C CONFUSION — Same energy, different context
+CHECK: Is cross-TF matrix being consulted? H4 phase determines meaning.
+FIX: ElliottGRU must use Multi-Head Attention with H4 context input.
+
+PATTERN: PROTOCOL CONFLICT — Two systems give opposite signals
+CHECK: Does early exit conflict with HOLD? Does CB block valid Elliott entry?
+FIX: Priority chain: STEEL > Safety > Universe Eq > Elliott > Modulation.
+
+PATTERN: PHANTOM PROFITS — Winning on paper, losing with commissions
+CHECK: grep "commission\|spread" in profit calculation function.
+FIX: Subtract commission + spread from EVERY profit calculation.
+
+PATTERN: 9-CLASS BOTTLENECK — ElliottGRU outputs 9 but needs 23
+CHECK: grep "wave_class.*9\|num_classes.*9" for old bottleneck.
+FIX: Expand Head 1 to 23 outputs with backward-compatible 23→9 mapping.
+
+PATTERN: SINGLE WAVE COUNT (anti-Feynman) — System says "THIS IS W3" instead of probabilities
+CHECK: Does ElliottGRU output argmax BEFORE certainty check?
+If system commits to ONE label without checking P(first)-P(second) → WRONG.
+FIX: Always output full softmax distribution. Trade only when certainty > φ_g_inverse.
+     Let probabilities shift naturally per bar (self-correction).
+
+PATTERN: FORCED RECOUNT — Manual wave recount instead of automatic
+CHECK: grep "recount\|re_count\|force_count" in brain code.
+FIX: Remove forced recounts. Feynman Path Integral means probabilities
+     shift automatically. When P(WC) > P(W3) → transition is NATURAL.
 ```
 
 ---
@@ -224,6 +298,64 @@ If ANY answer is wrong → BACK TO PHASE 2. The LOOP continues until HEALED.
   → PHASE 3: fix root cause (not just the counter)
   → PHASE 4: verify train#1 appears, loss > 0
   → PHASE 5: add death cycle check to XAGI Audit
+```
+
+---
+
+## EMERGENCY PROTOCOLS
+
+### If py_compile FAILS after fix:
+1. DO NOT make more edits
+2. Read the error message — it gives EXACT line number
+3. Fix the EXACT syntax error
+4. Re-run py_compile
+5. If still failing → `git diff launchers/start_brain.py` to see all changes
+6. Last resort → `git checkout launchers/start_brain.py` to revert
+
+### If neural net produces NaN:
+1. Check: is the COSMOS dict initialized?
+2. Check: are input features all valid (no NaN/Inf)?
+3. Check: is gradient clipping active? (clip_grad_norm_ 1.0)
+4. Check: is GRU hidden state detached before training?
+5. Add safety: `torch.nan_to_num(output, nan=0.0)` as guard
+
+### If confidence stuck at 0:
+1. Trace: `neural_tracer --cosmos _global_confidence_modifier`
+2. Check: any step multiplying by 0? (OMEGA proof, PULSE dead, Guardian blocking)
+3. Check: CONF_GATE threshold too high?
+4. Fix: bound all multipliers to [0.3, 2.0], never allow ×0
+
+### If brain starts but no trades:
+1. Check ZMQ: `grep "FEAT-RECV\|signal" /tmp/brain_startup.log`
+2. Check CONF_GATE: is threshold too high? (> 0.5 blocks most)
+3. Check EA: is MetaTrader connected? Is DDE/ZMQ bridge running?
+4. Check: is HOLD mechanism blocking everything? (SRP/CB/GSI)
+
+### V45 SAVE/LOAD SYMMETRY CHECK
+After any fix that adds/removes COSMOS dicts or nets:
+```bash
+# Count saves vs loads — must be EQUAL
+echo "V45 SAVE:" && grep -c "weights\[.*\] = " launchers/start_brain.py
+echo "V45 LOAD:" && grep -c "weights\.get\|weights\[" launchers/start_brain.py | grep -i "load"
+```
+If save count ≠ load count → learning will be LOST on restart.
+
+---
+
+## XAGI MANIFESTO COMPLIANCE (6 Laws)
+
+Every fix must satisfy these 6 laws of the living organism:
+```
+LAW 1: NO ZEROS — Data always flows. Epsilon guards everywhere.
+LAW 2: EVERY COMPONENT = AI — WHY dict on every decision.
+LAW 3: SELF-CORRECTION — BPTT fires on every trade close.
+LAW 4: NO DICTATORS — IL#158 PRIMARY, everything else modulates.
+LAW 5: DEATH OF STATIC — No hardcoded numbers in decisions.
+LAW 6: XAGI IS OWN ARMOR — Intelligence IS the shield.
+LAW 7: FEYNMAN PATH — Wave = ALL labels simultaneously.
+       Output probabilities (softmax 23). Trade only when
+       certainty = P(first) - P(second) > φ_inverse.
+       Self-correction automatic. Never force single count.
 ```
 
 ---
