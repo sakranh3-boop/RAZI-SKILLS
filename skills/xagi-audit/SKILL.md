@@ -184,33 +184,168 @@ VERIFY: 6 dimensions (position, velocity, acceleration, jerk, curvature, torsion
 
 ---
 
-## ROUND 5: ZERO STAGNATION HUNT — FIND THE DEAD
+## ROUND 5: ZERO STAGNATION HUNT — FIND THE DEAD, FROZEN, LOOPING & DISCONNECTED
 
-### 5.1 Frozen Systems
+### 5.1 FROZEN SYSTEMS — Giving constant 0 that never changes
 ```bash
+# In live logs: ANY system stuck at train#0 or loss=0.0000
 grep -r "train#0\|loss=0\.0000\|loss=0\.00 " /path/to/brain/logs/ 2>/dev/null | tail -20
-# OR from live output:
-grep "train#0" launchers/start_brain.py | head -10
-```
 
-### 5.2 Empty Training Functions
+# In code: shadow counters that might not be incrementing
+grep -n "_shadow_counter\[" launchers/start_brain.py | grep "+=" | head -20
+# Compare: how many shadow counters exist vs how many increment
+echo "Shadow counters defined:" && grep -c "_shadow_counter\s*=" launchers/start_brain.py
+echo "Shadow counters incrementing:" && grep -c "_shadow_counter.*+=" launchers/start_brain.py
+```
+EXPECTED: Every shadow counter that's defined MUST have a corresponding += increment.
+If count differs → a system is stuck in shadow FOREVER (like WDF was).
+
+### 5.2 DORMANT SYSTEMS — Exist but never called
+```bash
+# Find training functions that exist but are NEVER called
+python3 -c "
+import ast
+with open('launchers/start_brain.py') as f:
+    source = f.read()
+tree = ast.parse(source)
+
+# Get all function definitions
+defined = set()
+called = set()
+for node in ast.walk(tree):
+    if isinstance(node, ast.FunctionDef) and 'train' in node.name.lower():
+        defined.add(node.name)
+    if isinstance(node, ast.Call) and isinstance(getattr(node, 'func', None), ast.Attribute):
+        called.add(node.func.attr)
+    if isinstance(node, ast.Call) and isinstance(getattr(node, 'func', None), ast.Name):
+        called.add(node.func.id)
+
+dormant = defined - called
+if dormant:
+    print(f'DORMANT TRAINING FUNCTIONS (defined but never called): {dormant}')
+else:
+    print('CLEAN: All training functions are called')
+"
+```
+EXPECTED: 0 dormant. If ANY found → system exists as dead code, never trains.
+
+### 5.3 EMPTY TRAINING FUNCTIONS — Body is just 'pass' or 'return'
 ```bash
 grep -n "def.*train_step\|def.*_train\b" launchers/start_brain.py | while read line; do
     num=$(echo "$line" | cut -d: -f1)
-    # Check if function body is just 'pass'
-    sed -n "$((num+1)),$((num+3))p" launchers/start_brain.py | grep -q "pass" && echo "DEAD: $line"
+    sed -n "$((num+1)),$((num+5))p" launchers/start_brain.py | grep -q "pass\|return None\|return$" && echo "DEAD: $line"
 done
 ```
 
-### 5.3 Orphan COSMOS Dicts (defined but never read)
+### 5.4 INFINITE LOOPS WITHOUT PURPOSE — Spinning but not learning
 ```bash
+# Find loops in training that don't contain backward() or optimizer.step()
+grep -n "while True\|for.*range.*1000\|while.*count" launchers/start_brain.py | grep -i "train\|learn" | head -10
+
+# Find training functions that have NO backward/optimizer inside
+python3 -c "
+import ast
+with open('launchers/start_brain.py') as f:
+    source = f.read()
+    lines = source.split('\n')
+tree = ast.parse(source)
+
+for node in ast.walk(tree):
+    if isinstance(node, ast.FunctionDef) and 'train' in node.name.lower():
+        body_text = ast.get_source_segment(source, node) or ''
+        has_backward = 'backward()' in body_text
+        has_optimizer = 'optimizer' in body_text and 'step()' in body_text
+        if not has_backward and not has_optimizer:
+            print(f'NO LEARNING: {node.name} at line {node.lineno} — no backward/optimizer')
+"
+```
+EXPECTED: Every train function has backward() AND optimizer.step(). If missing → spinning without learning.
+
+### 5.5 DISCONNECTED SYSTEMS — Receive input but output goes nowhere
+```bash
+# Find functions that WRITE to COSMOS but no other function READS from that COSMOS
 python3 RORO/tools/neural_tracer.py --index 2>/dev/null
-grep "readers: 0" RORO/core/BRAIN_INDEX.md | head -10
+grep "readers: \[\]" RORO/core/BRAIN_INDEX.md 2>/dev/null | head -10
+
+# Find functions whose return value is never used
+grep -n "def.*_process\|def.*_analyze\|def.*_compute" launchers/start_brain.py | while read line; do
+    func=$(echo "$line" | grep -oP 'def \K\w+')
+    count=$(grep -c "$func(" launchers/start_brain.py)
+    if [ "$count" -le 1 ]; then
+        echo "DISCONNECTED: $func defined but called only at definition"
+    fi
+done
 ```
 
-### 5.4 Static Values in Decision Paths
+### 5.6 ORPHAN COSMOS DICTS — Defined but never read or written
 ```bash
-grep -n "0\.618\|1\.618\|0\.382\|2\.618\|4\.236" launchers/start_brain.py | grep -v "#\|PHI\|phi_g\|_phi_\|DEAD\|ABOLISHED\|Fib.*ratio\|FIB_RATIO" | head -20
+python3 RORO/tools/neural_tracer.py --index 2>/dev/null
+# Find dicts with 0 readers OR 0 writers
+grep -E "readers: 0|writers: 0" RORO/core/BRAIN_INDEX.md | head -15
+```
+
+### 5.7 CATCH-22 FLAGS — Variables that can never become True
+**Discovered in V10.64:** `_brain_loaded = False` at line 589, NEVER set to True → catch-22.
+```bash
+# Find boolean flags set to False that are NEVER set to True
+grep -n "= False$\|= False " launchers/start_brain.py | while read line; do
+    varname=$(echo "$line" | grep -oP '\w+(?=\s*=\s*False)')
+    if [ -n "$varname" ]; then
+        true_count=$(grep -c "${varname}.*= True\|${varname}.*=True" launchers/start_brain.py)
+        if [ "$true_count" -eq 0 ]; then
+            echo "CATCH-22: $varname is False and NEVER set to True — $line"
+        fi
+    fi
+done
+```
+
+### 5.8 STATIC PHI GHOSTS — Static 1.618 that keeps coming back
+**Recurring bug — killed 11 times in V10.74, keeps returning after upgrades.**
+```bash
+grep -n "PHI\s*=\s*1\.618\|phi\s*=\s*1\.618\|= 1\.618033\|= 0\.618033" launchers/start_brain.py | grep -v "#\|DEAD\|ABOLISHED\|GRAVITY\|_phi_g\|FIB_RATIO\|PHI_RATIOS" | head -10
+grep -n "0\.618\|1\.618\|0\.382\|2\.618\|4\.236" launchers/start_brain.py | grep -v "#\|PHI\|phi_g\|_phi_\|DEAD\|ABOLISHED\|Fib.*ratio\|FIB_RATIO\|GANN\|gann" | head -20
+```
+EXPECTED: 0 results. ALL values must use `_phi_g(sym)` / `_phi_g_inv(sym)` dynamic calls.
+
+### 5.9 GEMINI IMPORT SPAM — Repeated error logging
+**Recurring:** GeminiBrain logs `init failed` on EVERY restart — dozens of lines.
+```bash
+grep -c "GeminiBrain.*init failed\|GeminiBrain.*cannot import" launchers/start_brain.py 2>/dev/null
+grep -c "GeminiBrain" /path/to/brain/logs/*.log 2>/dev/null | tail -5
+```
+If > 1 occurrence in logs → warn-once guard is not working.
+
+### 5.10 DUPLICATE FUNCTIONS — Same logic twice
+**Discovered in V10.52.1:** `_universe_wave_creator_detect` was 89% duplicate of `_universe_wave_creator_detector`.
+```bash
+# Find suspiciously similar function names
+grep -n "def _" launchers/start_brain.py | sort -t'(' -k1,1 | awk -F'def ' '{print $2}' | awk -F'(' '{print $1}' | sort | uniq -d
+# Find functions with very similar names (differ by 1-2 chars)
+python3 -c "
+import ast
+with open('launchers/start_brain.py') as f:
+    tree = ast.parse(f.read())
+funcs = [n.name for n in ast.walk(tree) if isinstance(n, ast.FunctionDef)]
+for i, f1 in enumerate(funcs):
+    for f2 in funcs[i+1:]:
+        if f1 != f2 and (f1 in f2 or f2 in f1) and abs(len(f1)-len(f2)) <= 3:
+            print(f'SUSPECT DUPLICATE: {f1} vs {f2}')
+"
+```
+
+### 5.11 DOUBLE-REDUCTION — Two systems penalizing the same thing
+**Discovered in V10.52.1:** CB + Omen both reduced confidence → double penalty.
+```bash
+# Find confidence reductions that might stack
+grep -n "conf.*\*=.*0\.\|confidence.*\*=.*0\.\|conf.*-=" launchers/start_brain.py | head -20
+```
+VERIFY: No two systems penalize the same signal in the same tick.
+
+### 5.12 OMEN/DETECTOR CONFLICTS — Opposite conditions
+**Discovered in V10.52.1:** ENTROPY_SPIKE omen triggered on opposite condition vs STORM detector.
+```bash
+# Find detectors and omens that might fire on opposite conditions
+grep -n "ENTROPY\|STORM\|REGIME_CHANGE\|GRAVITY_LOSS" launchers/start_brain.py | grep -i "detect\|omen\|trigger" | head -15
 ```
 
 ---
@@ -258,6 +393,58 @@ grep -n "HOLD\|BLOCKED\|CONF_GATE\|confidence.*<\|conf.*threshold" launchers/sta
 ```
 VERIFY: System has gates that BLOCK trades when confidence is low.
 If ZERO gates → system fires at everything → guaranteed losses.
+
+### 6.5 DEATH CYCLE PATTERN — Does except block destroy the net?
+**Discovered during NEURAL RESURRECTION (2026-03-12):**
+WDF had a RuntimeError on every train → except block destroyed net + weights + set _last_input=None → next train creates fresh net → same error → infinite death cycle. Loss=0 forever.
+```bash
+# Find ALL except blocks in training functions that reset/destroy nets
+grep -B2 -A5 "except.*Exception\|except.*RuntimeError" launchers/start_brain.py | grep -i "= None\|del \|\.reset\|= {}\|destroy" | head -15
+```
+EXPECTED: 0 results. Except blocks must LOG the error, NOT destroy the net.
+If ANY found → potential death cycle (net destroyed on every error → never trains).
+
+### 6.6 SCOPE LEAK — Variables from wrong function scope
+**Discovered during NEURAL RESURRECTION (2026-03-12):**
+`confidence` variable existed in `make_ultimate_decision()` but NOT in `process_trade_result()`.
+5G16, 5G17, 5G18 training blocks all used bare `confidence` → NameError every time → 3 learning systems dead.
+The first NameError (_trade_history_by_symbol) MASKED the second one (confidence) — cascading invisible failure.
+```bash
+# Find bare 'confidence' references in process_trade_result that aren't qualified
+grep -n "confidence[^_]" launchers/start_brain.py | grep -i "5G\|train_step\|process_trade" | grep -v "_conf\|avg_conf\|cached\|get(\|fallback\|guardian\|#" | head -15
+```
+EXPECTED: 0 results. ALL confidence refs in process_trade_result must use qualified names:
+- `_cg17_avg_conf` (from trade history)
+- `_conf_guardian_last_result.get(symbol, {}).get('input_conf', 0.5)` (from cached)
+- NEVER bare `confidence` (lives in make_ultimate_decision scope only)
+
+### 6.7 CASCADING NAMEERROR — First error hides all subsequent errors
+**Discovered during NEURAL RESURRECTION (2026-03-12):**
+When `_trade_history_by_symbol` was undefined, the NameError killed the ENTIRE training block.
+The `confidence` bug was HIDDEN behind it — only visible after fixing the first bug.
+```bash
+# Find training blocks with multiple potential NameErrors
+# Look for variables used but never defined in process_trade_result scope
+python3 -c "
+import ast
+with open('launchers/start_brain.py') as f:
+    source = f.read()
+tree = ast.parse(source)
+# Find all names used in process_trade_result that might be from wrong scope
+for node in ast.walk(tree):
+    if isinstance(node, ast.FunctionDef) and node.name == 'process_trade_result':
+        names = set()
+        for child in ast.walk(node):
+            if isinstance(child, ast.Name) and isinstance(child.ctx, ast.Load):
+                names.add(child.id)
+        # Check for suspicious bare names (not common builtins)
+        suspect = [n for n in names if n in ('confidence', 'signal', 'direction', 'regime')]
+        if suspect:
+            print(f'SUSPECT bare names in process_trade_result: {suspect}')
+        else:
+            print('CLEAN: No suspect bare names found')
+"
+```
 
 ---
 
@@ -331,15 +518,13 @@ grep -n "pulse_score\|jerk_score\|hamiltonian\|kinetic_energy" launchers/start_b
 ```
 ALL must be computed per-tick, per-symbol. ZERO static values.
 
----
-
 ## OUTPUT REQUIREMENT
 
 After ALL 8 rounds, produce this EXACT format:
 
 ```
 ╔═══════════════════════════════════════════════════════════════╗
-║               XAGI DEEP AUDIT — TRUTH TABLE                  ║
+║               XAGI DEEP AUDIT — TRUTH TABLE                   ║
 ╠═══════════════════════════════════════════════════════════════╣
 ║ R1 FOUNDATION                                                 ║
 ║   Pure Prism:         CLEAN / VIOLATED                        ║
@@ -366,17 +551,29 @@ After ALL 8 rounds, produce this EXACT format:
 ║   Wave Creator/DNA:   DYNAMIC / STATIC                        ║
 ║   PHI_GRAVITY 6D:     BREATHING / STATIC                      ║
 ╠═══════════════════════════════════════════════════════════════╣
-║ R5 STAGNATION                                                 ║
+║ R5 STAGNATION + DORMANT + DISCONNECTED                        ║
 ║   Frozen train#0:     [list or NONE]                          ║
-║   Dead functions:     [list or NONE]                          ║
-║   Orphan COSMOS:      [list or NONE]                          ║
-║   Static values:      [count or ZERO]                         ║
+║   Shadow stuck:       [list or NONE] (defined but no +=)      ║
+║   Dormant functions:  [list or NONE] (exist, never called)    ║
+║   Empty train bodies: [list or NONE] (just pass/return)       ║
+║   Loops no learning:  [list or NONE] (loop but no backward)   ║
+║   Disconnected:       [list or NONE] (output goes nowhere)    ║
+║   Orphan COSMOS:      [list or NONE] (0 readers or writers)   ║
+║   Catch-22 flags:     [list or NONE] (False, never True)      ║
+║   Static PHI ghosts:  [count or ZERO]                         ║
+║   Gemini spam:        SILENCED / STILL SPAMMING               ║
+║   Duplicate funcs:    [list or NONE]                          ║
+║   Double-reduction:   [list or NONE]                          ║
+║   Omen conflicts:     [list or NONE]                          ║
 ╠═══════════════════════════════════════════════════════════════╣
 ║ R6 CRASH TEST                                                 ║
 ║   Hallucination:      CLEAN / DETECTED                        ║
 ║   Weight Punishment:  ACTIVE (losses penalize) / DEAD         ║
 ║   Blind Shooting:     NO (signals vary) / YES (random)        ║
 ║   HOLD Gates:         XX active / ZERO (danger!)              ║
+║   Death Cycles:       NONE / [list of except-destroys-net]    ║
+║   Scope Leaks:        NONE / [list of bare vars wrong scope]  ║
+║   Cascading NameErr:  NONE / [list of hidden errors]          ║
 ╠═══════════════════════════════════════════════════════════════╣
 ║ R7 CONNECTOME MEDIC                                           ║
 ║   Sync Pulse:         ALL GREEN / XX CRITICAL                 ║
