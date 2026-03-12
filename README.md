@@ -6,9 +6,19 @@
 
 ## Available Skills
 
-| Skill | Command | Purpose |
-|-------|---------|---------|
-| **XAGI Deep Audit** | `/xagi-audit` or say "XAGI" | 8-round cosmic X-ray: Foundation → Neural Nets → Feedback → Universe → Stagnation → Crash Test → Connectome → Future Proof |
+| Skill | Command | Tag | Purpose |
+|-------|---------|-----|---------|
+| **XAGI Deep Audit** | `/xagi-audit` | `XAGI-V1.0-COSMIC_XRAY` | 8-round cosmic X-ray: Foundation → Neural Nets → Feedback → Universe → Stagnation → Crash Test → Connectome → Future Proof |
+| **MEDIC** | `/medic` | `MEDIC-V1.0-COSMIC_SURGEON` | 5-phase intelligent healer: Triage → Diagnose (5 WHY) → Surgery → Post-Op → Feedback Loop + Vaccine |
+| **BATTLE ORDER** | `/battle` | `BATTLE-V1.0-NUCLEAR_RESURRECTION` | 4-pass nuclear fix: Recon → Surgical Strike → Deep Root (6 investigations) → Verification (BEFORE/AFTER) → Ralph Loop 5/5 + Docs + Monolith Push |
+
+## When to use which?
+
+```
+Single bug, clear symptom          → /medic
+Multiple bugs, system bleeding     → /battle
+Full organism health check         → /xagi-audit
+```
 
 ## Installation
 
@@ -20,16 +30,19 @@
 
 ### Local Install
 ```bash
-mkdir -p .claude/skills/xagi-audit
+mkdir -p .claude/skills/xagi-audit .claude/skills/medic .claude/skills/battle-order
 cp skills/xagi-audit/SKILL.md .claude/skills/xagi-audit/SKILL.md
+cp skills/medic/SKILL.md .claude/skills/medic/SKILL.md
+cp skills/battle-order/SKILL.md .claude/skills/battle-order/SKILL.md
 ```
 
 ## Triggers
 
-The XAGI Audit skill activates on these keywords:
-- `XAGI`, `audit`, `בדיקת`, `losing`, `הפסד`, `stuck`, `frozen`
-- `dead learning`, `not learning`, `CAGI`, `proof of life`
-- `crash test`, `blind shooting`, `hallucination`
+| Skill | Keywords |
+|-------|----------|
+| **XAGI Audit** | `XAGI`, `audit`, `בדיקת`, `losing`, `הפסד`, `stuck`, `frozen`, `dead learning`, `CAGI`, `proof of life`, `crash test`, `hallucination` |
+| **MEDIC** | `medic`, `fix`, `bug`, `crash`, `error`, `broken`, `not working`, `שבור`, `תתקן`, `באג`, `תרפא`, `heal`, `repair` |
+| **BATTLE ORDER** | `battle`, `nuclear`, `resurrection`, `critical fix`, `emergency`, `multiple bugs`, `system down`, `קרב`, `תקיפה`, `מפלצת` |
 
 ## Architecture
 
