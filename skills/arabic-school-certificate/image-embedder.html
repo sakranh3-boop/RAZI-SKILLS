@@ -24,7 +24,11 @@ img.preview { max-width: 150px; margin: 10px; border: 2px solid #ccc; border-rad
 <input type="file" id="logoFile" accept="image/*">
 <img id="logoPreview" class="preview" style="display:none">
 
-<label>2. خلفية الشهادة:</label>
+<label>2. لوجو وزارة التربية والتعليم:</label>
+<input type="file" id="ministryFile" accept="image/*">
+<img id="ministryPreview" class="preview" style="display:none">
+
+<label>3. خلفية الشهادة:</label>
 <input type="file" id="bgFile" accept="image/*">
 <img id="bgPreview" class="preview" style="display:none">
 
@@ -35,6 +39,7 @@ img.preview { max-width: 150px; margin: 10px; border: 2px solid #ccc; border-rad
 
 <script>
 var logoData = '';
+var ministryData = '';
 var bgData = '';
 
 document.getElementById('logoFile').addEventListener('change', function(e) {
@@ -45,6 +50,18 @@ document.getElementById('logoFile').addEventListener('change', function(e) {
     logoData = ev.target.result;
     document.getElementById('logoPreview').src = logoData;
     document.getElementById('logoPreview').style.display = 'inline';
+  };
+  reader.readAsDataURL(file);
+});
+
+document.getElementById('ministryFile').addEventListener('change', function(e) {
+  var file = e.target.files[0];
+  if (!file) return;
+  var reader = new FileReader();
+  reader.onload = function(ev) {
+    ministryData = ev.target.result;
+    document.getElementById('ministryPreview').src = ministryData;
+    document.getElementById('ministryPreview').style.display = 'inline';
   };
   reader.readAsDataURL(file);
 });
@@ -62,8 +79,8 @@ document.getElementById('bgFile').addEventListener('change', function(e) {
 });
 
 function generateFile() {
-  if (!logoData || !bgData) {
-    alert('الرجاء رفع الصورتين أولاً');
+  if (!logoData || !ministryData || !bgData) {
+    alert('الرجاء رفع جميع الصور أولاً');
     return;
   }
 
@@ -89,11 +106,13 @@ function generateFile() {
   parts.push('.certificate { width: 1123px; height: 794px; position: relative; margin: 20px auto; display: none; overflow: hidden; background: #fff8e1; border-radius: 15px; box-shadow: 0 0 15px rgba(170,130,90,0.4); direction: rtl; }');
   parts.push('.bg { position: absolute; width: 100%; height: 100%; object-fit: cover; opacity: 0.25; z-index: 0; }');
   parts.push('.logo { position: absolute; top: 15px; left: 15px; width: 90px; height: 90px; object-fit: contain; z-index: 2; }');
+  parts.push('.logo-ministry { position: absolute; top: 15px; right: 15px; width: 90px; height: 90px; object-fit: contain; z-index: 2; }');
   parts.push('.content { position: relative; z-index: 1; padding: 15px 30px; height: 100%; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; justify-content: space-between; text-align: center; direction: rtl; }');
   parts.push('.content h2 { color: #6B4E71; margin: 8px 0; font-size: 30px; }');
   parts.push('.content h3 { color: #855E42; margin: 6px 0; font-size: 22px; }');
   parts.push('.student-name { font-size: 24px; font-weight: bold; color: #6B4E71; margin: 8px 0; }');
-  parts.push('.cert-info { font-size: 18px; margin: 6px 0; }');
+  parts.push('.cert-class { font-size: 18px; margin: 6px 0; }');
+  parts.push('.cert-date { font-size: 18px; margin: 6px 0; }');
   parts.push('.content table { background: rgba(255,255,255,0.7); direction: rtl; width: 95%; }');
   parts.push('.content th, .content td { font-size: 16px; padding: 6px 8px; direction: rtl; text-align: center; }');
   parts.push('.content td.check { color: #2e7d32; font-size: 22px; font-weight: bold; }');
@@ -127,11 +146,13 @@ function generateFile() {
   parts.push('<div id="cert" class="certificate">');
   parts.push('<img class="bg" src="' + bgData + '">');
   parts.push('<img class="logo" src="' + logoData + '">');
+  parts.push('<img class="logo-ministry" src="' + ministryData + '">');
   parts.push('<div class="content">');
   parts.push('<h2>مدرسة بسمة طبعون الابتدائية</h2>');
   parts.push('<h3>شهادة صناع الأمل في حرب زئير الأسد للفصل الثاني 2026</h3>');
   parts.push('<div class="student-name" id="certStudent"></div>');
-  parts.push('<div class="cert-info" id="certInfo"></div>');
+  parts.push('<div class="cert-class" id="certClass"></div>');
+  parts.push('<div class="cert-date" id="certDate"></div>');
   parts.push('<table id="certResult"></table>');
   parts.push('<div class="message" id="certMsg"></div>');
   parts.push('<div class="signature">');
@@ -160,7 +181,8 @@ function generateFile() {
   parts.push('  var teacher = document.getElementById("teacherName").value;');
   parts.push('  if (!name || !cls || !dt || !teacher) { alert("الرجاء تعبئة جميع الحقول"); return; }');
   parts.push('  document.getElementById("certStudent").innerText = "فارس/ة التحدي والإرادة، الطالب/ة: " + name;');
-  parts.push('  document.getElementById("certInfo").innerText = "الصف: " + cls + " - التاريخ: " + dt;');
+  parts.push('  document.getElementById("certClass").innerText = "الصف: " + cls;');
+  parts.push('  document.getElementById("certDate").innerText = "التاريخ: " + dt;');
   parts.push('  document.getElementById("certTeacher").innerText = teacher;');
   parts.push('  var result = document.getElementById("certResult");');
   parts.push('  result.innerHTML = "<tr><th>الموضوع</th><th colspan=3>المشاركة</th><th colspan=3>إنجاز المهام</th></tr><tr><th></th><th>كامل</th><th>جزئي</th><th>لا يشارك</th><th>ينفذ بالكامل</th><th>ينفذ جزئيًا</th><th>لا ينفذ</th></tr>";');

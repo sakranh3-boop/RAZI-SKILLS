@@ -43,6 +43,13 @@ button:hover { background: #c48942; }
   object-fit: contain;
   z-index: 2;
 }
+.logo-ministry {
+  position: absolute;
+  top: 15px; right: 15px;
+  width: 90px; height: 90px;
+  object-fit: contain;
+  z-index: 2;
+}
 .content {
   position: relative;
   z-index: 1;
@@ -59,7 +66,8 @@ button:hover { background: #c48942; }
 .content h2 { color: #6B4E71; margin: 8px 0; font-size: 30px; }
 .content h3 { color: #855E42; margin: 6px 0; font-size: 22px; }
 .student-name { font-size: 24px; font-weight: bold; color: #6B4E71; margin: 8px 0; }
-.cert-info { font-size: 18px; margin: 6px 0; }
+.cert-class { font-size: 18px; margin: 6px 0; }
+.cert-date { font-size: 18px; margin: 6px 0; }
 .content table { background: rgba(255,255,255,0.7); direction: rtl; width: 95%; }
 .content th, .content td { font-size: 16px; padding: 6px 8px; direction: rtl; text-align: center; }
 .content td.check { color: #2e7d32; font-size: 22px; font-weight: bold; }
@@ -105,6 +113,7 @@ button:hover { background: #c48942; }
 <label>التاريخ: <input type="date" id="dateField"></label><br>
 <label>اسم المربي/ة: <input type="text" id="teacherName"></label><br>
 <label>لوجو المدرسة (مرة واحدة): <input type="file" id="logoInput" accept="image/*"></label><br>
+<label>لوجو وزارة التربية (مرة واحدة): <input type="file" id="ministryInput" accept="image/*"></label><br>
 <label>خلفية الشهادة (مرة واحدة): <input type="file" id="bgInput" accept="image/*"></label><br>
 
 <table id="evalTable">
@@ -136,13 +145,15 @@ button:hover { background: #c48942; }
 <div id="cert" class="certificate">
 <img id="certBg" class="bg" src="">
 <img id="certLogo" class="logo" src="">
+<img id="certMinistry" class="logo-ministry" src="">
 
 <div class="content">
 <h2>مدرسة بسمة طبعون الابتدائية</h2>
 <h3>شهادة صناع الأمل في حرب زئير الأسد للفصل الثاني 2026</h3>
 
 <div class="student-name" id="certStudent"></div>
-<div class="cert-info" id="certInfo"></div>
+<div class="cert-class" id="certClass"></div>
+<div class="cert-date" id="certDate"></div>
 <table id="certResult"></table>
 <div class="message" id="certMsg"></div>
 
@@ -171,7 +182,8 @@ function saveImage(file, key) {
   var reader = new FileReader();
   reader.onload = function(e) {
     localStorage.setItem(key, e.target.result);
-    document.getElementById(key === 'logo' ? 'certLogo' : 'certBg').src = e.target.result;
+    var elMap = { 'logo': 'certLogo', 'ministry': 'certMinistry', 'bg': 'certBg' };
+    document.getElementById(elMap[key]).src = e.target.result;
     document.getElementById('savedNote').style.display = 'block';
   };
   reader.readAsDataURL(file);
@@ -179,14 +191,19 @@ function saveImage(file, key) {
 
 window.addEventListener('load', function() {
   var logo = localStorage.getItem('logo');
+  var ministry = localStorage.getItem('ministry');
   var bg = localStorage.getItem('bg');
   if (logo) document.getElementById('certLogo').src = logo;
+  if (ministry) document.getElementById('certMinistry').src = ministry;
   if (bg) document.getElementById('certBg').src = bg;
-  if (logo || bg) document.getElementById('savedNote').style.display = 'block';
+  if (logo || ministry || bg) document.getElementById('savedNote').style.display = 'block';
 });
 
 document.getElementById('logoInput').addEventListener('change', function(e) {
   if (e.target.files[0]) saveImage(e.target.files[0], 'logo');
+});
+document.getElementById('ministryInput').addEventListener('change', function(e) {
+  if (e.target.files[0]) saveImage(e.target.files[0], 'ministry');
 });
 document.getElementById('bgInput').addEventListener('change', function(e) {
   if (e.target.files[0]) saveImage(e.target.files[0], 'bg');
@@ -211,12 +228,15 @@ function generate() {
 
   // تحميل الصور المحفوظة
   var logo = localStorage.getItem('logo');
+  var ministry = localStorage.getItem('ministry');
   var bg = localStorage.getItem('bg');
   if (logo) document.getElementById('certLogo').src = logo;
+  if (ministry) document.getElementById('certMinistry').src = ministry;
   if (bg) document.getElementById('certBg').src = bg;
 
   document.getElementById('certStudent').innerText = 'فارس/ة التحدي والإرادة، الطالب/ة: ' + name;
-  document.getElementById('certInfo').innerText = 'الصف: ' + cls + ' - التاريخ: ' + dt;
+  document.getElementById('certClass').innerText = 'الصف: ' + cls;
+  document.getElementById('certDate').innerText = 'التاريخ: ' + dt;
   document.getElementById('certTeacher').innerText = teacher;
 
   // جدول الشهادة مع علامات صح
