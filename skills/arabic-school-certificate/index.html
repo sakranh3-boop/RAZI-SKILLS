@@ -19,7 +19,7 @@ button:hover { background: #c48942; }
 .saved-note { background: #e8f5e9; padding: 8px; border-radius: 8px; text-align: center; color: #2e7d32; font-weight: bold; display: none; margin: 10px 0; }
 
 .certificate {
-  width: 794px; height: 1123px;
+  width: 1123px; height: 794px;
   position: relative;
   margin: 20px auto;
   display: none;
@@ -38,15 +38,15 @@ button:hover { background: #c48942; }
 }
 .logo {
   position: absolute;
-  top: 20px; left: 20px;
-  width: 100px; height: 100px;
+  top: 15px; left: 15px;
+  width: 90px; height: 90px;
   object-fit: contain;
   z-index: 2;
 }
 .content {
   position: relative;
   z-index: 1;
-  padding: 30px 40px;
+  padding: 20px 30px;
   height: 100%;
   box-sizing: border-box;
   display: flex;
@@ -55,23 +55,24 @@ button:hover { background: #c48942; }
   text-align: center;
   direction: rtl;
 }
-.content h2 { color: #6B4E71; margin: 8px 0; font-size: 24px; }
-.content h3 { color: #855E42; margin: 8px 0; font-size: 20px; }
-.student-name { font-size: 20px; font-weight: bold; color: #6B4E71; margin: 8px 0; }
-.cert-info { font-size: 16px; margin: 8px 0; }
-.content table { background: rgba(255,255,255,0.9); direction: rtl; }
-.content th, .content td { font-size: 13px; padding: 4px; direction: rtl; }
+.content h2 { color: #6B4E71; margin: 5px 0; font-size: 22px; }
+.content h3 { color: #855E42; margin: 5px 0; font-size: 17px; }
+.student-name { font-size: 18px; font-weight: bold; color: #6B4E71; margin: 5px 0; }
+.cert-info { font-size: 14px; margin: 5px 0; }
+.content table { background: rgba(255,255,255,0.9); direction: rtl; width: 95%; }
+.content th, .content td { font-size: 12px; padding: 3px 5px; direction: rtl; text-align: center; }
+.content td.check { color: #2e7d32; font-size: 16px; font-weight: bold; }
 .message {
   background: rgba(255,255,255,0.85);
-  padding: 10px;
+  padding: 8px;
   border-radius: 8px;
   white-space: pre-line;
-  font-size: 14px;
+  font-size: 12px;
   font-weight: bold;
   color: #6B4E71;
-  line-height: 1.5;
+  line-height: 1.4;
   width: 90%;
-  margin: 10px 0;
+  margin: 8px 0;
   direction: rtl;
   text-align: center;
 }
@@ -80,10 +81,10 @@ button:hover { background: #c48942; }
   justify-content: space-between;
   width: 100%;
   margin-top: auto;
-  padding-bottom: 20px;
+  padding-bottom: 15px;
   direction: rtl;
 }
-.signature div { text-align: center; width: 200px; }
+.signature div { text-align: center; width: 200px; font-size: 13px; }
 .line { border-top: 2px solid #855E42; margin-top: 10px; }
 
 @media print {
@@ -117,7 +118,7 @@ button:hover { background: #c48942; }
 <tr>
 <th></th>
 <th>كامل</th><th>جزئي</th><th>لا يشارك</th>
-<th>كامل</th><th>جزئي</th><th>لا ينفذ</th>
+<th>ينفذ بالكامل</th><th>ينفذ جزئيًا</th><th>لا ينفذ</th>
 </tr>
 </thead>
 <tbody id="evalBody">
@@ -192,7 +193,7 @@ document.getElementById('bgInput').addEventListener('change', function(e) {
   if (e.target.files[0]) saveImage(e.target.files[0], 'bg');
 });
 
-// checkbox يعمل مثل radio - كل مجموعة تسمح باختيار واحد فقط
+// checkbox يعمل مثل radio
 document.querySelectorAll('#evalBody tr').forEach(function(row) {
   var boxes = row.querySelectorAll('input[type="checkbox"]');
   var part = [boxes[0], boxes[1], boxes[2]];
@@ -219,15 +220,48 @@ function generate() {
   document.getElementById('certInfo').innerText = 'الصف: ' + cls + ' - التاريخ: ' + dt;
   document.getElementById('certTeacher').innerText = teacher;
 
+  // جدول الشهادة مع علامات صح
+  var partLabels = ['كامل', 'جزئي', 'لا يشارك'];
+  var taskLabels = ['ينفذ بالكامل', 'ينفذ جزئيًا', 'لا ينفذ'];
+
   var result = document.getElementById('certResult');
-  result.innerHTML = '<tr><th>الموضوع</th><th>المشاركة</th><th>إنجاز المهام</th></tr>';
+  result.innerHTML =
+    '<tr>' +
+    '<th>الموضوع</th>' +
+    '<th colspan="3">المشاركة</th>' +
+    '<th colspan="3">إنجاز المهام</th>' +
+    '</tr>' +
+    '<tr>' +
+    '<th></th>' +
+    '<th>كامل</th><th>جزئي</th><th>لا يشارك</th>' +
+    '<th>ينفذ بالكامل</th><th>ينفذ جزئيًا</th><th>لا ينفذ</th>' +
+    '</tr>';
 
   document.querySelectorAll('#evalBody tr').forEach(function(row) {
     var cells = row.querySelectorAll('td');
     var boxes = row.querySelectorAll('input[type="checkbox"]');
-    var p = boxes[0].checked ? 'كامل' : boxes[1].checked ? 'جزئي' : boxes[2].checked ? 'لا يشارك' : '';
-    var t = boxes[3].checked ? 'كامل' : boxes[4].checked ? 'جزئي' : boxes[5].checked ? 'لا ينفذ' : '';
-    result.innerHTML += '<tr><td><strong>' + cells[0].innerText + '</strong></td><td>' + p + '</td><td>' + t + '</td></tr>';
+    var tr = '<tr><td><strong>' + cells[0].innerText + '</strong></td>';
+
+    // المشاركة - 3 أعمدة مع علامة صح
+    for (var i = 0; i < 3; i++) {
+      if (boxes[i].checked) {
+        tr += '<td class="check">&#10004;</td>';
+      } else {
+        tr += '<td></td>';
+      }
+    }
+
+    // إنجاز المهام - 3 أعمدة مع علامة صح
+    for (var j = 3; j < 6; j++) {
+      if (boxes[j].checked) {
+        tr += '<td class="check">&#10004;</td>';
+      } else {
+        tr += '<td></td>';
+      }
+    }
+
+    tr += '</tr>';
+    result.innerHTML += tr;
   });
 
   // الرسالة الثابتة لكل الطلاب
@@ -248,7 +282,7 @@ function download() {
   html2canvas(cert, { scale: 3, useCORS: true }).then(function(canvas) {
     var imgData = canvas.toDataURL('image/png');
     var jsPDF = window.jspdf.jsPDF;
-    var pdf = new jsPDF({ orientation: 'portrait', unit: 'pt', format: 'a4' });
+    var pdf = new jsPDF({ orientation: 'landscape', unit: 'pt', format: 'a4' });
     var w = pdf.internal.pageSize.getWidth();
     var h = pdf.internal.pageSize.getHeight();
     pdf.addImage(imgData, 'PNG', 0, 0, w, h);
