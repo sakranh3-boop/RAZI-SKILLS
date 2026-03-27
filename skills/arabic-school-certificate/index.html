@@ -5,9 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>شهادة صناع الأمل - مدرسة بسمة طبعون</title>
 <style>
-body { font-family: "Arial", sans-serif; background-color: #fdf6e3; margin: 0; padding: 0; text-align: right; }
+body { font-family: "Arial", sans-serif; background-color: #fdf6e3; margin: 0; padding: 0; text-align: right; direction: rtl; }
 .container { max-width: 900px; margin: 20px auto; padding: 20px; }
 h1 { text-align: center; color: #855E42; }
+.upload-note { background: #e8f5e9; padding: 10px; border-radius: 8px; margin-bottom: 15px; text-align: center; color: #2e7d32; font-weight: bold; display: none; }
 form { background: #fff3e0; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(170,130,90,0.3); margin-bottom: 30px; }
 label { display: inline-block; margin: 5px 0; }
 input[type="text"], input[type="date"], input[type="file"] { padding: 5px; width: 200px; margin-left: 10px; }
@@ -19,16 +20,16 @@ td input[type="checkbox"] { transform: scale(1.2); margin: 0; }
 button { background-color: #d9a066; border: none; padding: 10px 20px; margin: 5px; color: white; font-size: 16px; border-radius: 5px; cursor: pointer; }
 button:hover { background-color: #c48942; }
 
-.certificate { position: relative; background: #fff8e1; border-radius: 15px; box-shadow: 0 0 15px rgba(170,130,90,0.4); margin-bottom: 30px; overflow: hidden; display: none; width: 794px; height: 1123px; /* A4 px @96dpi */ }
+.certificate { position: relative; background: #fff8e1; border-radius: 15px; box-shadow: 0 0 15px rgba(170,130,90,0.4); margin-bottom: 30px; overflow: hidden; display: none; width: 794px; height: 1123px; direction: rtl; text-align: right; }
 .certificate .certificate-background { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; opacity: 0.25; pointer-events: none; }
-.certificate .certificate-content { position: relative; z-index: 1; padding: 40px; box-sizing: border-box; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; overflow: hidden; text-align: center; }
+.certificate .certificate-content { position: relative; z-index: 1; padding: 30px 40px; box-sizing: border-box; height: 100%; display: flex; flex-direction: column; justify-content: flex-start; align-items: center; text-align: center; direction: rtl; }
 .certificate .school-logo { position: absolute; top: 20px; left: 20px; width: 100px; height: 100px; object-fit: contain; z-index: 2; }
-.certificate h2 { font-size: 26px; margin: 10px 0; color: #6B4E71; }
-.certificate .student-name { font-size: 22px; font-weight: bold; margin: 10px 0; color: #6B4E71; }
-.certificate table { margin-top: 10px; margin-bottom: 10px; background: rgba(255,255,255,0.9); width: 100%; border: 1px solid #855E42; table-layout: fixed; }
-.certificate table th, .certificate table td { border: 1px solid #855E42; padding: 4px; font-size: 14px; word-wrap: break-word; }
-.certificate .message { font-size: 16px; margin: 15px 0; color: #6B4E71; font-weight: bold; background: rgba(255,255,255,0.85); padding: 10px; border-radius: 8px; line-height: 1.4; white-space: pre-line; width: 90%; }
-.signature { display: flex; justify-content: space-between; width: 100%; margin-top: auto; }
+.certificate h2 { font-size: 24px; margin: 8px 0; color: #6B4E71; direction: rtl; }
+.certificate .student-name { font-size: 20px; font-weight: bold; margin: 8px 0; color: #6B4E71; direction: rtl; }
+.certificate table { margin-top: 8px; margin-bottom: 8px; background: rgba(255,255,255,0.9); width: 100%; border: 1px solid #855E42; table-layout: fixed; direction: rtl; }
+.certificate table th, .certificate table td { border: 1px solid #855E42; padding: 4px; font-size: 13px; word-wrap: break-word; direction: rtl; text-align: center; }
+.certificate .message { font-size: 14px; margin: 10px 0; color: #6B4E71; font-weight: bold; background: rgba(255,255,255,0.85); padding: 10px; border-radius: 8px; line-height: 1.5; white-space: pre-line; width: 90%; direction: rtl; text-align: center; }
+.signature { display: flex; justify-content: space-between; width: 100%; margin-top: auto; padding-bottom: 20px; direction: rtl; }
 .signature div { text-align: center; width: 200px; }
 .signature-line { border-top: 2px solid #855E42; margin-top: 10px; }
 .signature-name { margin-top: 5px; font-size: 14px; }
@@ -36,7 +37,7 @@ button:hover { background-color: #c48942; }
 @media print {
   body { background: white; }
   .container { max-width: 100%; }
-  form, h1, button { display: none; }
+  form, h1, button, .upload-note { display: none; }
   .certificate { box-shadow: none; page-break-after: always; width: 100%; height: auto; }
 }
 </style>
@@ -44,13 +45,14 @@ button:hover { background-color: #c48942; }
 <body>
 <div class="container">
 <h1>نموذج تقييم الطالب - مدرسة بسمة طبعون الابتدائية</h1>
+<div class="upload-note" id="uploadNote">تم حفظ الصور! اللوجو والخلفية سيظهران تلقائيًا في كل شهادة.</div>
 <form id="evaluationForm">
 <label>اسم الطالب: <input type="text" id="studentName" required></label><br>
 <label>الصف: <input type="text" id="className" required></label><br>
 <label>التاريخ: <input type="date" id="date" required></label><br>
 <label>اسم المربي/ة: <input type="text" id="teacherName" required></label><br>
-<label>اختيار لوجو المدرسة: <input type="file" id="logoInput" accept="image/*"></label><br>
-<label>اختيار خلفية الشهادة: <input type="file" id="backgroundInput" accept="image/*"></label><br>
+<label>اختيار لوجو المدرسة (مرة واحدة فقط): <input type="file" id="logoInput" accept="image/*"></label><br>
+<label>اختيار خلفية الشهادة (مرة واحدة فقط): <input type="file" id="backgroundInput" accept="image/*"></label><br>
 
 <table id="evaluationTable">
 <thead>
@@ -110,78 +112,97 @@ button:hover { background-color: #c48942; }
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
-// تحميل الصور من الهاتف
-document.getElementById('logoInput').addEventListener('change', e=>{
-  const file=e.target.files[0];
-  if(file) document.getElementById('schoolLogo').src=URL.createObjectURL(file);
+// حفظ الصور في localStorage لتظهر تلقائيًا في كل مرة
+function saveImageToStorage(file, key) {
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    localStorage.setItem(key, e.target.result);
+    if (key === 'schoolLogo') document.getElementById('schoolLogo').src = e.target.result;
+    if (key === 'certBg') document.getElementById('certBackground').src = e.target.result;
+    document.getElementById('uploadNote').style.display = 'block';
+  };
+  reader.readAsDataURL(file);
+}
+
+// تحميل الصور المحفوظة عند فتح الصفحة
+window.addEventListener('load', function() {
+  const savedLogo = localStorage.getItem('schoolLogo');
+  const savedBg = localStorage.getItem('certBg');
+  if (savedLogo) document.getElementById('schoolLogo').src = savedLogo;
+  if (savedBg) document.getElementById('certBackground').src = savedBg;
+  if (savedLogo || savedBg) document.getElementById('uploadNote').style.display = 'block';
 });
-document.getElementById('backgroundInput').addEventListener('change', e=>{
-  const file=e.target.files[0];
-  if(file) document.getElementById('certBackground').src=URL.createObjectURL(file);
+
+document.getElementById('logoInput').addEventListener('change', e => {
+  const file = e.target.files[0];
+  if (file) saveImageToStorage(file, 'schoolLogo');
+});
+document.getElementById('backgroundInput').addEventListener('change', e => {
+  const file = e.target.files[0];
+  if (file) saveImageToStorage(file, 'certBg');
 });
 
 // checkbox كـ radio
-document.querySelectorAll('#evaluationTable tbody tr').forEach(row=>{
-  const boxes=row.querySelectorAll('input[type="checkbox"]');
-  const part=Array.from(boxes).slice(0,3);
-  const task=Array.from(boxes).slice(3,6);
-  part.forEach(c=>c.addEventListener('change',()=>{if(c.checked)part.forEach(b=>{if(b!==c)b.checked=false;});}));
-  task.forEach(c=>c.addEventListener('change',()=>{if(c.checked)task.forEach(b=>{if(b!==c)b.checked=false;});}));
+document.querySelectorAll('#evaluationTable tbody tr').forEach(row => {
+  const boxes = row.querySelectorAll('input[type="checkbox"]');
+  const part = Array.from(boxes).slice(0, 3);
+  const task = Array.from(boxes).slice(3, 6);
+  part.forEach(c => c.addEventListener('change', () => { if (c.checked) part.forEach(b => { if (b !== c) b.checked = false; }); }));
+  task.forEach(c => c.addEventListener('change', () => { if (c.checked) task.forEach(b => { if (b !== c) b.checked = false; }); }));
 });
 
-function generateCertificate(){
-  const studentName=document.getElementById('studentName').value;
-  const className=document.getElementById('className').value;
-  const date=document.getElementById('date').value;
-  const teacherName=document.getElementById('teacherName').value;
-  if(!studentName||!className||!date||!teacherName){alert('الرجاء تعبئة جميع الحقول المطلوبة'); return;}
+function generateCertificate() {
+  const studentName = document.getElementById('studentName').value;
+  const className = document.getElementById('className').value;
+  const date = document.getElementById('date').value;
+  const teacherName = document.getElementById('teacherName').value;
+  if (!studentName || !className || !date || !teacherName) { alert('الرجاء تعبئة جميع الحقول المطلوبة'); return; }
 
-  document.getElementById('certStudentName').innerText=`فارس/ة التحدي والإرادة، الطالب/ة: ${studentName}`;
-  document.getElementById('certClassDate').innerText=`الصف: ${className} - التاريخ: ${date}`;
-  document.getElementById('teacherSignName').innerText=teacherName;
+  // تحميل الصور المحفوظة للشهادة
+  const savedLogo = localStorage.getItem('schoolLogo');
+  const savedBg = localStorage.getItem('certBg');
+  if (savedLogo) document.getElementById('schoolLogo').src = savedLogo;
+  if (savedBg) document.getElementById('certBackground').src = savedBg;
 
-  const certTable=document.getElementById('certTable');
-  certTable.innerHTML=`<tr><th>الموضوع</th><th>المشاركة</th><th>إنجاز المهام</th></tr>`;
-  document.querySelectorAll('#evaluationTable tbody tr').forEach(row=>{
-    const subject=row.dataset.subject;
-    const boxes=row.querySelectorAll('input[type="checkbox"]');
-    const part=Array.from(boxes).slice(0,3);
-    const task=Array.from(boxes).slice(3,6);
-    let pV='',tV='';
-    if(part[0].checked) pV='كامل'; else if(part[1].checked) pV='جزئي'; else if(part[2].checked) pV='لا يشارك';
-    if(task[0].checked) tV='ينفذ بالكامل'; else if(task[1].checked) tV='ينفذ جزئيًا'; else if(task[2].checked) tV='لا ينفذ';
-    certTable.innerHTML+=`<tr><td><strong>${subject}</strong></td><td>${pV}</td><td>${tV}</td></tr>`;
+  document.getElementById('certStudentName').innerText = 'فارس/ة التحدي والإرادة، الطالب/ة: ' + studentName;
+  document.getElementById('certClassDate').innerText = 'الصف: ' + className + ' - التاريخ: ' + date;
+  document.getElementById('teacherSignName').innerText = teacherName;
+
+  const certTable = document.getElementById('certTable');
+  certTable.innerHTML = '<tr><th>الموضوع</th><th>المشاركة</th><th>إنجاز المهام</th></tr>';
+  document.querySelectorAll('#evaluationTable tbody tr').forEach(row => {
+    const subject = row.dataset.subject;
+    const boxes = row.querySelectorAll('input[type="checkbox"]');
+    const part = Array.from(boxes).slice(0, 3);
+    const task = Array.from(boxes).slice(3, 6);
+    let pV = '', tV = '';
+    if (part[0].checked) pV = 'كامل'; else if (part[1].checked) pV = 'جزئي'; else if (part[2].checked) pV = 'لا يشارك';
+    if (task[0].checked) tV = 'ينفذ بالكامل'; else if (task[1].checked) tV = 'ينفذ جزئيًا'; else if (task[2].checked) tV = 'لا ينفذ';
+    certTable.innerHTML += '<tr><td><strong>' + subject + '</strong></td><td>' + pV + '</td><td>' + tV + '</td></tr>';
   });
 
-  const fixedMessage=`عزيزي الطالب/ عزيزتي الطالبة
-بإرادتك تثبت أنك أقوى من كل الظروف وأن إصرارك يزرع الأمل.
-اعلم أن مشاركتك عن بعد ليست مجرد متابعة للدراسة، بل هي قصة شجاعة وصمود نحو النجاح.
-لا تتخلَّ عن أحلامك ومستقبلك
-مديرة المدرسة
-سلوى نعراني`;
-  document.getElementById('certMessage').innerText=fixedMessage;
+  // الرسالة الثابتة التي تظهر لكل الطلاب
+  document.getElementById('certMessage').innerText =
+    'عزيزي الطالب/ عزيزتي الطالبة\n' +
+    'بإرادتك تثبت أنك أقوى من كل الظروف وأن إصرارك يزرع الأمل.\n' +
+    'اعلم أن مشاركتك عن بعد ليست مجرد متابعة للدراسة، بل هي قصة شجاعة وصمود نحو النجاح.\n' +
+    'لا تتخلَّ عن أحلامك ومستقبلك\n' +
+    'مديرة المدرسة\n' +
+    'سلوى نعراني';
 
-  // ضبط حجم الجدول والنص تلقائيًا إذا كان كبيرًا
-  const certContent=document.querySelector('.certificate-content');
-  let scale=1;
-  while(certContent.scrollHeight>certContent.clientHeight && scale>0.5){
-    scale-=0.05;
-    certContent.style.transform=`scale(${scale})`;
-  }
-
-  document.getElementById('certificate').style.display='block';
-  document.getElementById('certificate').scrollIntoView({behavior:"smooth"});
+  document.getElementById('certificate').style.display = 'block';
+  document.getElementById('certificate').scrollIntoView({ behavior: "smooth" });
 }
 
-function downloadPDF(){
-  const cert=document.getElementById('certificate');
-  html2canvas(cert,{scale:3,useCORS:true}).then(canvas=>{
-    const imgData=canvas.toDataURL('image/png');
-    const { jsPDF }=window.jspdf;
-    const pdf=new jsPDF({orientation:'portrait', unit:'pt', format:'a4'});
-    const pdfWidth=pdf.internal.pageSize.getWidth();
-    const pdfHeight=pdf.internal.pageSize.getHeight();
-    pdf.addImage(imgData,'PNG',0,0,pdfWidth,pdfHeight);
+function downloadPDF() {
+  const cert = document.getElementById('certificate');
+  html2canvas(cert, { scale: 3, useCORS: true }).then(canvas => {
+    const imgData = canvas.toDataURL('image/png');
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF({ orientation: 'portrait', unit: 'pt', format: 'a4' });
+    const pdfWidth = pdf.internal.pageSize.getWidth();
+    const pdfHeight = pdf.internal.pageSize.getHeight();
+    pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
     pdf.save('شهادة الطالب.pdf');
   });
 }
