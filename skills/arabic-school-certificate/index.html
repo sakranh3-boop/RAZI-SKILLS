@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>شهادة صناع الأمل - مدرسة بسمة طبعون</title>
+<style>
+body { font-family: "Arial", sans-serif; background-color: #fdf6e3; margin: 0; padding: 0; text-align: right; }
+.container { max-width: 900px; margin: 20px auto; padding: 20px; }
+h1 { text-align: center; color: #855E42; }
+form { background: #fff3e0; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(170,130,90,0.3); margin-bottom: 30px; }
+label { display: inline-block; margin: 5px 0; }
+input[type="text"], input[type="date"], input[type="file"] { padding: 5px; width: 200px; margin-left: 10px; }
+table { width: 100%; border-collapse: collapse; margin-top: 15px; margin-bottom: 15px; }
+table, th, td { border: 1px solid #855E42; }
+th, td { padding: 6px; text-align: center; font-size: 14px; }
+th { background-color: #f5deb3; }
+td input[type="checkbox"] { transform: scale(1.2); margin: 0; }
+button { background-color: #d9a066; border: none; padding: 10px 20px; margin: 5px; color: white; font-size: 16px; border-radius: 5px; cursor: pointer; }
+button:hover { background-color: #c48942; }
+
+.certificate { position: relative; background: #fff8e1; border-radius: 15px; box-shadow: 0 0 15px rgba(170,130,90,0.4); margin-bottom: 30px; overflow: hidden; display: none; width: 794px; height: 1123px; /* A4 px @96dpi */ }
+.certificate .certificate-background { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; opacity: 0.25; pointer-events: none; }
+.certificate .certificate-content { position: relative; z-index: 1; padding: 40px; box-sizing: border-box; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; overflow: hidden; text-align: center; }
+.certificate .school-logo { position: absolute; top: 20px; left: 20px; width: 100px; height: 100px; object-fit: contain; z-index: 2; }
+.certificate h2 { font-size: 26px; margin: 10px 0; color: #6B4E71; }
+.certificate .student-name { font-size: 22px; font-weight: bold; margin: 10px 0; color: #6B4E71; }
+.certificate table { margin-top: 10px; margin-bottom: 10px; background: rgba(255,255,255,0.9); width: 100%; border: 1px solid #855E42; table-layout: fixed; }
+.certificate table th, .certificate table td { border: 1px solid #855E42; padding: 4px; font-size: 14px; word-wrap: break-word; }
+.certificate .message { font-size: 16px; margin: 15px 0; color: #6B4E71; font-weight: bold; background: rgba(255,255,255,0.85); padding: 10px; border-radius: 8px; line-height: 1.4; white-space: pre-line; width: 90%; }
+.signature { display: flex; justify-content: space-between; width: 100%; margin-top: auto; }
+.signature div { text-align: center; width: 200px; }
+.signature-line { border-top: 2px solid #855E42; margin-top: 10px; }
+.signature-name { margin-top: 5px; font-size: 14px; }
+
+@media print {
+  body { background: white; }
+  .container { max-width: 100%; }
+  form, h1, button { display: none; }
+  .certificate { box-shadow: none; page-break-after: always; width: 100%; height: auto; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+<h1>نموذج تقييم الطالب - مدرسة بسمة طبعون الابتدائية</h1>
+<form id="evaluationForm">
+<label>اسم الطالب: <input type="text" id="studentName" required></label><br>
+<label>الصف: <input type="text" id="className" required></label><br>
+<label>التاريخ: <input type="date" id="date" required></label><br>
+<label>اسم المربي/ة: <input type="text" id="teacherName" required></label><br>
+<label>اختيار لوجو المدرسة: <input type="file" id="logoInput" accept="image/*"></label><br>
+<label>اختيار خلفية الشهادة: <input type="file" id="backgroundInput" accept="image/*"></label><br>
+
+<table id="evaluationTable">
+<thead>
+<tr>
+<th>الموضوع</th>
+<th colspan="3">المشاركة</th>
+<th colspan="3">إنجاز المهام</th>
+</tr>
+<tr>
+<th></th>
+<th>كامل</th>
+<th>جزئي</th>
+<th>لا يشارك</th>
+<th>ينفذ بالكامل</th>
+<th>ينفذ جزئيًا</th>
+<th>لا ينفذ</th>
+</tr>
+</thead>
+<tbody>
+<tr data-subject="اللغة العربية"><td>اللغة العربية</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td></tr>
+<tr data-subject="اللغة العبرية"><td>اللغة العبرية</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td></tr>
+<tr data-subject="اللغة الإنجليزية"><td>اللغة الإنجليزية</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td></tr>
+<tr data-subject="رياضيات"><td>رياضيات</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td></tr>
+<tr data-subject="علوم"><td>علوم</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td></tr>
+</tbody>
+</table>
+
+<button type="button" onclick="generateCertificate()">إنشاء الشهادة</button>
+<button type="button" onclick="downloadPDF()">تحميل PDF</button>
+</form>
+
+<div id="certificate" class="certificate">
+<img id="certBackground" class="certificate-background" src="" alt="خلفية الشهادة">
+<div class="certificate-content">
+<img class="school-logo" src="" alt="لوجو المدرسة" id="schoolLogo">
+<h2>مدرسة بسمة طبعون الابتدائية</h2>
+<h2 style="color: #855E42;">شهادة صناع الأمل في حرب زئير الأسد للفصل الثاني 2026</h2>
+<div class="student-name" id="certStudentName"></div>
+<div id="certClassDate" style="font-size: 16px; margin: 10px 0;"></div>
+<table id="certTable"></table>
+<div class="message" id="certMessage"></div>
+<div class="signature">
+<div>
+<strong>توقيع المربي/ة</strong>
+<div class="signature-line"></div>
+<div id="teacherSignName" class="signature-name">اسم المربي/ة</div>
+</div>
+<div>
+<strong>توقيع المديرة</strong>
+<div class="signature-line"></div>
+<div id="principalName" class="signature-name">سلوى نعراني</div>
+</div>
+</div>
+</div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+// تحميل الصور من الهاتف
+document.getElementById('logoInput').addEventListener('change', e=>{
+  const file=e.target.files[0];
+  if(file) document.getElementById('schoolLogo').src=URL.createObjectURL(file);
+});
+document.getElementById('backgroundInput').addEventListener('change', e=>{
+  const file=e.target.files[0];
+  if(file) document.getElementById('certBackground').src=URL.createObjectURL(file);
+});
+
+// checkbox كـ radio
+document.querySelectorAll('#evaluationTable tbody tr').forEach(row=>{
+  const boxes=row.querySelectorAll('input[type="checkbox"]');
+  const part=Array.from(boxes).slice(0,3);
+  const task=Array.from(boxes).slice(3,6);
+  part.forEach(c=>c.addEventListener('change',()=>{if(c.checked)part.forEach(b=>{if(b!==c)b.checked=false;});}));
+  task.forEach(c=>c.addEventListener('change',()=>{if(c.checked)task.forEach(b=>{if(b!==c)b.checked=false;});}));
+});
+
+function generateCertificate(){
+  const studentName=document.getElementById('studentName').value;
+  const className=document.getElementById('className').value;
+  const date=document.getElementById('date').value;
+  const teacherName=document.getElementById('teacherName').value;
+  if(!studentName||!className||!date||!teacherName){alert('الرجاء تعبئة جميع الحقول المطلوبة'); return;}
+
+  document.getElementById('certStudentName').innerText=`فارس/ة التحدي والإرادة، الطالب/ة: ${studentName}`;
+  document.getElementById('certClassDate').innerText=`الصف: ${className} - التاريخ: ${date}`;
+  document.getElementById('teacherSignName').innerText=teacherName;
+
+  const certTable=document.getElementById('certTable');
+  certTable.innerHTML=`<tr><th>الموضوع</th><th>المشاركة</th><th>إنجاز المهام</th></tr>`;
+  document.querySelectorAll('#evaluationTable tbody tr').forEach(row=>{
+    const subject=row.dataset.subject;
+    const boxes=row.querySelectorAll('input[type="checkbox"]');
+    const part=Array.from(boxes).slice(0,3);
+    const task=Array.from(boxes).slice(3,6);
+    let pV='',tV='';
+    if(part[0].checked) pV='كامل'; else if(part[1].checked) pV='جزئي'; else if(part[2].checked) pV='لا يشارك';
+    if(task[0].checked) tV='ينفذ بالكامل'; else if(task[1].checked) tV='ينفذ جزئيًا'; else if(task[2].checked) tV='لا ينفذ';
+    certTable.innerHTML+=`<tr><td><strong>${subject}</strong></td><td>${pV}</td><td>${tV}</td></tr>`;
+  });
+
+  const fixedMessage=`عزيزي الطالب/ عزيزتي الطالبة
+بإرادتك تثبت أنك أقوى من كل الظروف وأن إصرارك يزرع الأمل.
+اعلم أن مشاركتك عن بعد ليست مجرد متابعة للدراسة، بل هي قصة شجاعة وصمود نحو النجاح.
+لا تتخلَّ عن أحلامك ومستقبلك
+مديرة المدرسة
+سلوى نعراني`;
+  document.getElementById('certMessage').innerText=fixedMessage;
+
+  // ضبط حجم الجدول والنص تلقائيًا إذا كان كبيرًا
+  const certContent=document.querySelector('.certificate-content');
+  let scale=1;
+  while(certContent.scrollHeight>certContent.clientHeight && scale>0.5){
+    scale-=0.05;
+    certContent.style.transform=`scale(${scale})`;
+  }
+
+  document.getElementById('certificate').style.display='block';
+  document.getElementById('certificate').scrollIntoView({behavior:"smooth"});
+}
+
+function downloadPDF(){
+  const cert=document.getElementById('certificate');
+  html2canvas(cert,{scale:3,useCORS:true}).then(canvas=>{
+    const imgData=canvas.toDataURL('image/png');
+    const { jsPDF }=window.jspdf;
+    const pdf=new jsPDF({orientation:'portrait', unit:'pt', format:'a4'});
+    const pdfWidth=pdf.internal.pageSize.getWidth();
+    const pdfHeight=pdf.internal.pageSize.getHeight();
+    pdf.addImage(imgData,'PNG',0,0,pdfWidth,pdfHeight);
+    pdf.save('شهادة الطالب.pdf');
+  });
+}
+</script>
+</body>
+</html>
