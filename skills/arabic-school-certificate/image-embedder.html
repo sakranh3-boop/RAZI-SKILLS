@@ -13,9 +13,8 @@ input { margin: 10px 0; }
 button { background: #d9a066; color: white; border: none; padding: 15px 30px; font-size: 18px; border-radius: 8px; cursor: pointer; margin-top: 20px; display: block; width: 100%; }
 button:hover { background: #c48942; }
 .status { margin-top: 15px; color: #2e7d32; font-weight: bold; }
-.error { margin-top: 15px; color: red; font-weight: bold; }
 img.preview { max-width: 200px; margin: 10px; border: 2px solid #ccc; border-radius: 8px; }
-#downloadLink { display: none; background: #2e7d32; color: white; padding: 15px 30px; font-size: 18px; border-radius: 8px; text-decoration: none; margin-top: 15px; display: none; }
+#downloadLink { display: none; background: #2e7d32; color: white; padding: 15px; font-size: 18px; border-radius: 8px; text-decoration: none; margin-top: 15px; }
 </style>
 </head>
 <body>
@@ -28,9 +27,9 @@ img.preview { max-width: 200px; margin: 10px; border: 2px solid #ccc; border-rad
 <img id="bgPreview" class="preview" style="display:none">
 
 <button id="genBtn" onclick="generateFile()">إنشاء ملف الشهادة النهائي</button>
+<br>
 <a id="downloadLink" href="#">اضغطي هنا لتحميل الملف</a>
 <div class="status" id="status"></div>
-<div class="error" id="error"></div>
 </div>
 
 <script>
@@ -39,38 +38,29 @@ var bgData = '';
 document.getElementById('bgFile').addEventListener('change', function(e) {
   var file = e.target.files[0];
   if (!file) return;
-  document.getElementById('error').innerText = '';
   var reader = new FileReader();
   reader.onload = function(ev) {
     bgData = ev.target.result;
     document.getElementById('bgPreview').src = bgData;
     document.getElementById('bgPreview').style.display = 'inline';
   };
-  reader.onerror = function() {
-    document.getElementById('error').innerText = 'خطأ في قراءة الملف';
-  };
   reader.readAsDataURL(file);
 });
 
 function generateFile() {
   if (!bgData) { alert('الرجاء رفع صورة الخلفية أولاً'); return; }
-
   document.getElementById('genBtn').innerText = 'جاري الإنشاء...';
-  document.getElementById('error').innerText = '';
 
   try {
     var html = buildHTML();
     var blob = new Blob([html], { type: 'text/html' });
     var url = URL.createObjectURL(blob);
 
-    // show download link for mobile
     var link = document.getElementById('downloadLink');
     link.href = url;
     link.download = 'index.html';
     link.style.display = 'block';
-    link.innerText = 'اضغطي هنا لتحميل الملف';
 
-    // also try auto download
     var a = document.createElement('a');
     a.href = url;
     a.download = 'index.html';
@@ -78,16 +68,19 @@ function generateFile() {
     a.click();
     document.body.removeChild(a);
 
-    document.getElementById('status').innerText = 'تم! إذا لم يتحمل تلقائياً اضغطي الرابط أعلاه';
-    document.getElementById('genBtn').innerText = 'إنشاء ملف الشهادة النهائي';
+    document.getElementById('status').innerText = 'تم! إذا لم يتحمل تلقائياً اضغطي الرابط الأخضر';
   } catch(e) {
-    document.getElementById('error').innerText = 'خطأ: ' + e.message;
-    document.getElementById('genBtn').innerText = 'إنشاء ملف الشهادة النهائي';
+    document.getElementById('status').innerText = 'خطأ: ' + e.message;
   }
+  document.getElementById('genBtn').innerText = 'إنشاء ملف الشهادة النهائي';
 }
 
 function buildHTML() {
-  var s = '<!DOCTYPE html>\n<html lang="ar" dir="rtl">\n<head>\n<meta charset="UTF-8">\n<meta name="viewport" content="width=device-width, initial-scale=1.0">\n<title>شهادة صناع الأمل</title>\n<style>\n';
+  var sc = 'scr' + 'ipt';
+  var s = '';
+  s += '<!DOCTYPE html>\n<html lang="ar" dir="rtl">\n<head>\n<meta charset="UTF-8">\n';
+  s += '<meta name="viewport" content="width=device-width, initial-scale=1.0">\n';
+  s += '<title>شهادة صناع الأمل</title>\n<style>\n';
   s += 'body{font-family:Arial;background:#fdf6e3;margin:0;direction:rtl}\n';
   s += '.container{max-width:1150px;margin:auto;padding:20px}\n';
   s += 'h1{text-align:center;color:#855E42}\n';
@@ -100,22 +93,25 @@ function buildHTML() {
   s += 'button{background:#d9a066;color:#fff;padding:10px 20px;border:none;margin:5px;border-radius:5px;cursor:pointer;font-size:16px}\n';
   s += '.certificate{width:1123px;height:794px;position:relative;margin:20px auto;display:none;overflow:hidden;background:white;border-radius:15px;box-shadow:0 0 15px rgba(170,130,90,0.4);direction:rtl}\n';
   s += '.bg{position:absolute;width:100%;height:100%;object-fit:cover;opacity:1;z-index:0}\n';
-  s += '.content{position:absolute;z-index:1;top:16%;left:28%;width:58%;height:67%;box-sizing:border-box;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;text-align:center;direction:rtl;padding:0 10px}\n';
-  s += '.content h2{color:#6B4E71;margin:3px 0;font-size:26px}\n';
-  s += '.content h3{color:#855E42;margin:2px 0;font-size:18px}\n';
-  s += '.student-name{font-size:20px;font-weight:bold;color:#6B4E71;margin:4px 0}\n';
-  s += '.cert-class{font-size:16px;margin:2px 0}\n';
-  s += '.cert-date{font-size:16px;margin:2px 0}\n';
-  s += '.content table{direction:rtl;width:100%;margin:5px 0}\n';
-  s += '.content th,.content td{font-size:13px;padding:3px 4px;direction:rtl;text-align:center;border:1px solid #855E42}\n';
+  s += '.content{position:absolute;z-index:1;top:18%;left:35%;width:58%;height:55%;box-sizing:border-box;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;text-align:center;direction:rtl;padding:0 10px}\n';
+  s += '.content h2{color:#6B4E71;margin:2px 0;font-size:20px}\n';
+  s += '.content h3{color:#855E42;margin:2px 0;font-size:14px}\n';
+  s += '.student-name{font-size:16px;font-weight:bold;color:#6B4E71;margin:3px 0}\n';
+  s += '.cert-class{font-size:13px;margin:1px 0}\n';
+  s += '.cert-date{font-size:13px;margin:1px 0}\n';
+  s += '.content table{direction:rtl;width:100%;margin:4px 0}\n';
+  s += '.content th,.content td{font-size:10px;padding:2px 3px;direction:rtl;text-align:center;border:1px solid #855E42}\n';
   s += '.content th{background:rgba(245,222,179,0.7)}\n';
   s += '.content td{background:rgba(255,255,255,0.5)}\n';
-  s += '.content td.check{color:#2e7d32;font-size:14px;font-weight:bold}\n';
-  s += '.message{padding:2px;white-space:pre-line;font-size:14px;font-weight:bold;color:#6B4E71;line-height:1.5;width:100%;margin:5px 0;direction:rtl;text-align:center}\n';
+  s += '.content td.check{color:#2e7d32;font-size:13px;font-weight:bold}\n';
+  s += '.message{padding:2px;white-space:pre-line;font-size:11px;font-weight:bold;color:#6B4E71;line-height:1.3;width:100%;margin:3px 0;direction:rtl;text-align:center}\n';
   s += '.signature{display:flex;justify-content:space-around;width:100%;direction:rtl;margin-top:auto}\n';
-  s += '.sig-right{text-align:center;font-size:13px}\n';
-  s += '.sig-left{text-align:center;font-size:13px;font-weight:bold}\n';
-  s += '@media print{form,h1,button{display:none!important}.certificate{box-shadow:none;display:block!important;margin:0;border-radius:0}.container{padding:0;max-width:100%}body{background:white}}\n';
+  s += '.sig-right{text-align:center;font-size:12px}\n';
+  s += '.sig-left{text-align:center;font-size:12px;font-weight:bold}\n';
+  s += '#savedImage{display:none;text-align:center;margin:20px auto;max-width:1123px}\n';
+  s += '#savedImage p{font-size:20px;color:#2e7d32;font-weight:bold}\n';
+  s += '#savedImage img{width:100%;border:3px solid #d9a066;border-radius:10px}\n';
+  s += '@media print{form,h1,button,#savedImage{display:none!important}.certificate{box-shadow:none;display:block!important;margin:0;border-radius:0}}\n';
   s += '</style>\n</head>\n<body>\n<div class="container">\n';
   s += '<h1>نموذج تقييم الطالب - مدرسة بسمة طبعون الابتدائية</h1>\n';
   s += '<form>\n';
@@ -134,7 +130,6 @@ function buildHTML() {
   s += '</tbody></table>\n';
   s += '<button type="button" onclick="generate()">إنشاء الشهادة</button>\n';
   s += '<button type="button" onclick="saveAsImage()">حفظ كصورة</button>\n';
-  s += '<button type="button" onclick="savePDF()">تحميل PDF</button>\n';
   s += '</form>\n';
   s += '<div id="cert" class="certificate">\n';
   s += '<img class="bg" src="' + bgData + '">\n';
@@ -150,26 +145,16 @@ function buildHTML() {
   s += '<div class="sig-right"><div>توقيع المربي/ة</div><div id="certTeacher"></div></div>\n';
   s += '<div class="sig-left"><div>توقيع المديرة</div><div>سلوى نعراني</div></div>\n';
   s += '</div>\n</div>\n</div>\n';
-  s += '<div id="savedImage" style="display:none;text-align:center;margin:20px auto;max-width:1123px;">\n';
-  s += '<p style="font-size:20px;color:#2e7d32;font-weight:bold;">اضغطي مطولاً على الصورة ثم "حفظ الصورة"</p>\n';
-  s += '<img id="resultImage" style="width:100%;border:3px solid #d9a066;border-radius:10px;">\n';
-  s += '</div>\n</div>\n';
-
-  // scripts - use separate string to avoid browser parsing issues
-  var sc = 'scr' + 'ipt';
+  s += '<div id="savedImage"><p>اضغطي مطولاً على الصورة ← حفظ الصورة</p><img id="resultImage"></div>\n';
+  s += '</div>\n';
   s += '<' + sc + ' src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></' + sc + '>\n';
-  s += '<' + sc + ' src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></' + sc + '>\n';
   s += '<' + sc + '>\n';
-
-  // checkbox radio behavior
   s += 'document.querySelectorAll("#evalBody tr").forEach(function(row){\n';
   s += 'var boxes=row.querySelectorAll("input[type=checkbox]");\n';
   s += 'var a=[boxes[0],boxes[1],boxes[2]],b=[boxes[3],boxes[4],boxes[5]];\n';
   s += 'a.forEach(function(c){c.onclick=function(){a.forEach(function(x){if(x!==c)x.checked=false})}});\n';
   s += 'b.forEach(function(c){c.onclick=function(){b.forEach(function(x){if(x!==c)x.checked=false})}});\n';
   s += '});\n';
-
-  // generate function
   s += 'function generate(){\n';
   s += 'var n=document.getElementById("studentName").value;\n';
   s += 'var c=document.getElementById("className").value;\n';
@@ -181,8 +166,7 @@ function buildHTML() {
   s += 'document.getElementById("certDate").innerText="التاريخ: "+d;\n';
   s += 'document.getElementById("certTeacher").innerText=t;\n';
   s += 'var r=document.getElementById("certResult");\n';
-  s += 'r.innerHTML="<tr><th>الموضوع</th><th colspan=3>المشاركة</th><th colspan=3>إنجاز المهام</th></tr>';
-  s += '<tr><th></th><th>كامل</th><th>جزئي</th><th>لا يشارك</th><th>ينفذ بالكامل</th><th>ينفذ جزئيًا</th><th>لا ينفذ</th></tr>";\n';
+  s += 'r.innerHTML="<tr><th>الموضوع</th><th colspan=3>المشاركة</th><th colspan=3>إنجاز المهام</th></tr><tr><th></th><th>كامل</th><th>جزئي</th><th>لا يشارك</th><th>ينفذ بالكامل</th><th>ينفذ جزئيًا</th><th>لا ينفذ</th></tr>";\n';
   s += 'document.querySelectorAll("#evalBody tr").forEach(function(row){\n';
   s += 'var cells=row.querySelectorAll("td");\n';
   s += 'var boxes=row.querySelectorAll("input[type=checkbox]");\n';
@@ -197,19 +181,6 @@ function buildHTML() {
   s += 'document.getElementById("cert").style.display="block";\n';
   s += 'document.getElementById("cert").scrollIntoView({behavior:"smooth"});\n';
   s += '}\n';
-
-  // save as PDF
-  s += 'function savePDF(){\n';
-  s += 'var cert=document.getElementById("cert");\n';
-  s += 'if(cert.style.display==="none"){alert("أنشئ الشهادة أولاً");return}\n';
-  s += 'html2canvas(cert,{scale:2,useCORS:true,allowTaint:true}).then(function(canvas){\n';
-  s += 'var img=canvas.toDataURL("image/jpeg",0.9);\n';
-  s += 'var pdf=new window.jspdf.jsPDF({orientation:"landscape",unit:"px",format:[1123,794]});\n';
-  s += 'pdf.addImage(img,"JPEG",0,0,1123,794);\n';
-  s += 'pdf.save("شهادة_الطالب.pdf");\n';
-  s += '})}\n';
-
-  // save as image - show below certificate
   s += 'function saveAsImage(){\n';
   s += 'var cert=document.getElementById("cert");\n';
   s += 'if(cert.style.display==="none"){alert("أنشئ الشهادة أولاً");return}\n';
@@ -218,7 +189,6 @@ function buildHTML() {
   s += 'document.getElementById("savedImage").style.display="block";\n';
   s += 'document.getElementById("savedImage").scrollIntoView({behavior:"smooth"});\n';
   s += '})}\n';
-
   s += '</' + sc + '>\n</body>\n</html>';
   return s;
 }
