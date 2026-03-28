@@ -77,7 +77,7 @@ function generateFile() {
   p.push('.content td{background:rgba(255,255,255,0.5)}');
   p.push('.content td.check{color:#2e7d32;font-size:15px;font-weight:bold}');
   p.push('.message{padding:2px;white-space:pre-line;font-size:14px;font-weight:bold;color:#6B4E71;line-height:1.6;width:100%;margin:5px 0;direction:rtl;text-align:center}');
-  p.push('.signature{display:flex;justify-content:space-between;width:58%;direction:rtl;position:absolute;bottom:22%;left:28%;z-index:1}');
+  p.push('.signature{display:flex;justify-content:space-around;width:40%;direction:rtl;position:absolute;bottom:20%;left:38%;z-index:1}');
   p.push('.sig-right{text-align:center;font-size:14px}');
   p.push('.sig-left{text-align:center;font-size:14px;font-weight:bold}');
   p.push('@media print{form,h1,button,.saved-note{display:none!important}.certificate{box-shadow:none;display:block!important;margin:0;border-radius:0}.container{padding:0;max-width:100%}body{background:white}}');
@@ -148,9 +148,7 @@ function generateFile() {
   p.push('var msg="عزيزي الطالب/ عزيزتي الطالبة\\n\\n";');
   p.push('msg+="بإرادتك تثبت أنك أقوى من كل الظروف وأن إصرارك يزرع الأمل.\\n";');
   p.push('msg+="اعلم أن مشاركتك عن بعد ليست مجرد متابعة للدراسة، بل هي قصة شجاعة وصمود نحو النجاح.\\n";');
-  p.push('msg+="لا تتخلَّ عن أحلامك ومستقبلك\\n\\n";');
-  p.push('msg+="مديرة المدرسة\\n";');
-  p.push('msg+="سلوى نعراني";');
+  p.push('msg+="لا تتخلَّ عن أحلامك ومستقبلك";');
   p.push('document.getElementById("certMsg").innerText=msg;');
   p.push('document.getElementById("cert").style.display="block";');
   p.push('document.getElementById("cert").scrollIntoView({behavior:"smooth"})');
