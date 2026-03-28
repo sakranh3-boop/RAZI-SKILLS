@@ -2,31 +2,35 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>أداة تضمين خلفية الشهادة</title>
 <style>
-body { font-family: Arial; background: #fdf6e3; padding: 40px; text-align: center; direction: rtl; }
+body { font-family: Arial; background: #fdf6e3; padding: 20px; text-align: center; direction: rtl; }
 .box { background: white; max-width: 500px; margin: auto; padding: 30px; border-radius: 15px; box-shadow: 0 0 15px rgba(0,0,0,0.1); }
-h1 { color: #855E42; }
+h1 { color: #855E42; font-size: 22px; }
 label { display: block; margin: 15px 0 5px; font-weight: bold; font-size: 18px; }
 input { margin: 10px 0; }
-button { background: #d9a066; color: white; border: none; padding: 15px 30px; font-size: 18px; border-radius: 8px; cursor: pointer; margin-top: 20px; }
+button { background: #d9a066; color: white; border: none; padding: 15px 30px; font-size: 18px; border-radius: 8px; cursor: pointer; margin-top: 20px; display: block; width: 100%; }
 button:hover { background: #c48942; }
 .status { margin-top: 15px; color: #2e7d32; font-weight: bold; }
+.error { margin-top: 15px; color: red; font-weight: bold; }
 img.preview { max-width: 200px; margin: 10px; border: 2px solid #ccc; border-radius: 8px; }
+#downloadLink { display: none; background: #2e7d32; color: white; padding: 15px 30px; font-size: 18px; border-radius: 8px; text-decoration: none; margin-top: 15px; display: none; }
 </style>
 </head>
 <body>
 <div class="box">
 <h1>أداة تضمين خلفية الشهادة</h1>
-<p>ارفعي صورة الخلفية ثم اضغطي الزر لتحميل ملف الشهادة النهائي</p>
+<p>ارفعي صورة الخلفية ثم اضغطي الزر</p>
 
 <label>خلفية الشهادة:</label>
 <input type="file" id="bgFile" accept="image/*">
 <img id="bgPreview" class="preview" style="display:none">
 
-<br>
-<button onclick="generateFile()">إنشاء ملف الشهادة النهائي</button>
+<button id="genBtn" onclick="generateFile()">إنشاء ملف الشهادة النهائي</button>
+<a id="downloadLink" href="#">اضغطي هنا لتحميل الملف</a>
 <div class="status" id="status"></div>
+<div class="error" id="error"></div>
 </div>
 
 <script>
@@ -35,11 +39,15 @@ var bgData = '';
 document.getElementById('bgFile').addEventListener('change', function(e) {
   var file = e.target.files[0];
   if (!file) return;
+  document.getElementById('error').innerText = '';
   var reader = new FileReader();
   reader.onload = function(ev) {
     bgData = ev.target.result;
     document.getElementById('bgPreview').src = bgData;
     document.getElementById('bgPreview').style.display = 'inline';
+  };
+  reader.onerror = function() {
+    document.getElementById('error').innerText = 'خطأ في قراءة الملف';
   };
   reader.readAsDataURL(file);
 });
@@ -47,123 +55,169 @@ document.getElementById('bgFile').addEventListener('change', function(e) {
 function generateFile() {
   if (!bgData) { alert('الرجاء رفع صورة الخلفية أولاً'); return; }
 
-  var p = [];
-  p.push('<!DOCTYPE html>');
-  p.push('<html lang="ar" dir="rtl">');
-  p.push('<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">');
-  p.push('<title>شهادة صناع الأمل</title>');
-  p.push('<style>');
-  p.push('body{font-family:Arial;background:#fdf6e3;margin:0;direction:rtl}');
-  p.push('.container{max-width:1150px;margin:auto;padding:20px}');
-  p.push('h1{text-align:center;color:#855E42}');
-  p.push('form{background:#fff3e0;padding:20px;border-radius:10px}');
-  p.push('label{display:inline-block;margin:5px 0}');
-  p.push('input[type="text"],input[type="date"]{padding:5px;width:200px}');
-  p.push('table{width:100%;border-collapse:collapse;margin:10px 0}');
-  p.push('th,td{border:1px solid #855E42;padding:6px;text-align:center}');
-  p.push('th{background:#f5deb3}');
-  p.push('button{background:#d9a066;color:#fff;padding:10px 20px;border:none;margin:5px;border-radius:5px;cursor:pointer;font-size:16px}');
-  p.push('.certificate{width:1123px;height:794px;position:relative;margin:20px auto;display:none;overflow:hidden;background:white;border-radius:15px;box-shadow:0 0 15px rgba(170,130,90,0.4);direction:rtl}');
-  p.push('.bg{position:absolute;width:100%;height:100%;object-fit:cover;opacity:1;z-index:0}');
-  p.push('.content{position:absolute;z-index:1;top:16%;left:28%;width:58%;height:60%;box-sizing:border-box;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;text-align:center;direction:rtl;padding:0 10px}');
-  p.push('.content h2{color:#6B4E71;margin:3px 0;font-size:24px}');
-  p.push('.content h3{color:#855E42;margin:3px 0;font-size:17px}');
-  p.push('.student-name{font-size:19px;font-weight:bold;color:#6B4E71;margin:5px 0}');
-  p.push('.cert-class{font-size:15px;margin:3px 0}');
-  p.push('.cert-date{font-size:15px;margin:3px 0}');
-  p.push('.content table{direction:rtl;width:100%;margin:5px 0}');
-  p.push('.content th,.content td{font-size:12px;padding:3px 4px;direction:rtl;text-align:center;border:1px solid #855E42}');
-  p.push('.content th{background:rgba(245,222,179,0.7)}');
-  p.push('.content td{background:rgba(255,255,255,0.5)}');
-  p.push('.content td.check{color:#2e7d32;font-size:15px;font-weight:bold}');
-  p.push('.message{padding:2px;white-space:pre-line;font-size:14px;font-weight:bold;color:#6B4E71;line-height:1.6;width:100%;margin:5px 0;direction:rtl;text-align:center}');
-  p.push('.signature{display:flex;justify-content:space-around;width:100%;direction:rtl;margin-top:auto}');
-  p.push('.sig-right{text-align:center;font-size:14px}');
-  p.push('.sig-left{text-align:center;font-size:14px;font-weight:bold}');
-  p.push('@media print{form,h1,button,.saved-note{display:none!important}.certificate{box-shadow:none;display:block!important;margin:0;border-radius:0}.container{padding:0;max-width:100%}body{background:white}}');
-  p.push('</style></head><body><div class="container">');
-  p.push('<h1>نموذج تقييم الطالب - مدرسة بسمة طبعون الابتدائية</h1>');
-  p.push('<form>');
-  p.push('<label>اسم الطالب: <input type="text" id="studentName"></label><br>');
-  p.push('<label>الصف: <input type="text" id="className"></label><br>');
-  p.push('<label>التاريخ: <input type="date" id="dateField"></label><br>');
-  p.push('<label>اسم المربي/ة: <input type="text" id="teacherName"></label><br>');
-  p.push('<table id="evalTable"><thead>');
-  p.push('<tr><th>الموضوع</th><th colspan="3">المشاركة</th><th colspan="3">إنجاز المهام</th></tr>');
-  p.push('<tr><th></th><th>كامل</th><th>جزئي</th><th>لا يشارك</th><th>ينفذ بالكامل</th><th>ينفذ جزئيًا</th><th>لا ينفذ</th></tr>');
-  p.push('</thead><tbody id="evalBody">');
-  var subjects = ['اللغة العربية','اللغة العبرية','اللغة الإنجليزية','رياضيات','علوم'];
-  for (var s = 0; s < subjects.length; s++) {
-    p.push('<tr><td>'+subjects[s]+'</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td></tr>');
+  document.getElementById('genBtn').innerText = 'جاري الإنشاء...';
+  document.getElementById('error').innerText = '';
+
+  try {
+    var html = buildHTML();
+    var blob = new Blob([html], { type: 'text/html' });
+    var url = URL.createObjectURL(blob);
+
+    // show download link for mobile
+    var link = document.getElementById('downloadLink');
+    link.href = url;
+    link.download = 'index.html';
+    link.style.display = 'block';
+    link.innerText = 'اضغطي هنا لتحميل الملف';
+
+    // also try auto download
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = 'index.html';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+
+    document.getElementById('status').innerText = 'تم! إذا لم يتحمل تلقائياً اضغطي الرابط أعلاه';
+    document.getElementById('genBtn').innerText = 'إنشاء ملف الشهادة النهائي';
+  } catch(e) {
+    document.getElementById('error').innerText = 'خطأ: ' + e.message;
+    document.getElementById('genBtn').innerText = 'إنشاء ملف الشهادة النهائي';
   }
-  p.push('</tbody></table>');
-  p.push('<button type="button" onclick="generate()">إنشاء الشهادة</button>');
-  p.push('<button type="button" onclick="downloadImage()">حفظ كصورة</button>');
-  p.push('<button type="button" onclick="download()">تحميل PDF</button>');
-  p.push('</form>');
-  p.push('<div id="cert" class="certificate">');
-  p.push('<img class="bg" src="' + bgData + '">');
-  p.push('<div class="content">');
-  p.push('<h2>مدرسة بسمة طبعون الابتدائية</h2>');
-  p.push('<h3>شهادة صناع الأمل في حرب زئير الأسد للفصل الثاني 2026</h3>');
-  p.push('<div class="student-name" id="certStudent"></div>');
-  p.push('<div class="cert-class" id="certClass"></div>');
-  p.push('<div class="cert-date" id="certDate"></div>');
-  p.push('<table id="certResult"></table>');
-  p.push('<div class="message" id="certMsg"></div>');
-  p.push('<div class="signature">');
-  p.push('<div class="sig-right"><div>توقيع المربي/ة</div><div id="certTeacher"></div></div>');
-  p.push('<div class="sig-left"><div>توقيع المديرة</div><div>سلوى نعراني</div></div>');
-  p.push('</div>');
-  p.push('</div></div>');
+}
 
-  p.push('<scr'+'ipt src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></scr'+'ipt>');
-  p.push('<scr'+'ipt src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></scr'+'ipt>');
-  p.push('<scr'+'ipt>');
-  p.push('document.querySelectorAll("#evalBody tr").forEach(function(row){');
-  p.push('var boxes=row.querySelectorAll("input[type=checkbox]");');
-  p.push('var a=[boxes[0],boxes[1],boxes[2]],b=[boxes[3],boxes[4],boxes[5]];');
-  p.push('a.forEach(function(c){c.onclick=function(){a.forEach(function(x){if(x!==c)x.checked=false})}});');
-  p.push('b.forEach(function(c){c.onclick=function(){b.forEach(function(x){if(x!==c)x.checked=false})}});');
-  p.push('});');
-  p.push('function generate(){');
-  p.push('var name=document.getElementById("studentName").value;');
-  p.push('var cls=document.getElementById("className").value;');
-  p.push('var dt=document.getElementById("dateField").value;');
-  p.push('var teacher=document.getElementById("teacherName").value;');
-  p.push('if(!name||!cls||!dt||!teacher){alert("الرجاء تعبئة جميع الحقول");return}');
-  p.push('document.getElementById("certStudent").innerText="فارس/ة التحدي والإرادة، الطالب/ة: "+name;');
-  p.push('document.getElementById("certClass").innerText="الصف: "+cls;');
-  p.push('document.getElementById("certDate").innerText="التاريخ: "+dt;');
-  p.push('document.getElementById("certTeacher").innerText=teacher;');
-  p.push('var result=document.getElementById("certResult");');
-  p.push('result.innerHTML="<tr><th>الموضوع</th><th colspan=3>المشاركة</th><th colspan=3>إنجاز المهام</th></tr><tr><th></th><th>كامل</th><th>جزئي</th><th>لا يشارك</th><th>ينفذ بالكامل</th><th>ينفذ جزئيًا</th><th>لا ينفذ</th></tr>";');
-  p.push('document.querySelectorAll("#evalBody tr").forEach(function(row){');
-  p.push('var cells=row.querySelectorAll("td");');
-  p.push('var boxes=row.querySelectorAll("input[type=checkbox]");');
-  p.push('var tr="<tr><td><strong>"+cells[0].innerText+"</strong></td>";');
-  p.push('for(var i=0;i<6;i++){tr+=boxes[i].checked?\'<td class="check">&#10004;</td>\':"<td></td>"}');
-  p.push('tr+="</tr>";result.innerHTML+=tr});');
-  p.push('var msg="عزيزي الطالب/ عزيزتي الطالبة\\n\\n";');
-  p.push('msg+="بإرادتك تثبت أنك أقوى من كل الظروف وأن إصرارك يزرع الأمل.\\n";');
-  p.push('msg+="اعلم أن مشاركتك عن بعد ليست مجرد متابعة للدراسة، بل هي قصة شجاعة وصمود نحو النجاح.\\n";');
-  p.push('msg+="لا تتخلَّ عن أحلامك ومستقبلك";');
-  p.push('document.getElementById("certMsg").innerText=msg;');
-  p.push('document.getElementById("cert").style.display="block";');
-  p.push('document.getElementById("cert").scrollIntoView({behavior:"smooth"})');
-  p.push('}');
-  p.push('function capturecert(){var cert=document.getElementById("cert");if(cert.style.display==="none"){alert("أنشئ الشهادة أولاً");return Promise.reject()}cert.scrollIntoView({behavior:"auto"});return html2canvas(cert,{scale:2,useCORS:true,allowTaint:true,width:1123,height:794,scrollX:-cert.getBoundingClientRect().left,scrollY:-cert.getBoundingClientRect().top,windowWidth:1200})}');
-  p.push('function downloadImage(){capturecert().then(function(canvas){var dataUrl=canvas.toDataURL("image/png");var newTab=window.open();if(newTab){newTab.document.write("<html><head><title>شهادة</title></head><body style=margin:0;text-align:center;background:#333><img src="+dataUrl+" style=max-width:100%;height:auto></body></html>");newTab.document.close()}else{var link=document.createElement("a");link.download="شهادة_الطالب.png";link.href=dataUrl;document.body.appendChild(link);link.click();document.body.removeChild(link)}})}');
-  p.push('function download(){capturecert().then(function(canvas){try{var imgData=canvas.toDataURL("image/jpeg",0.9);var jsPDF=window.jspdf.jsPDF;var pdf=new jsPDF({orientation:"landscape",unit:"px",format:[1123,794]});pdf.addImage(imgData,"JPEG",0,0,1123,794);pdf.save("شهادة الطالب.pdf")}catch(e){downloadImage()}})}');
-  p.push('</scr'+'ipt></body></html>');
+function buildHTML() {
+  var s = '<!DOCTYPE html>\n<html lang="ar" dir="rtl">\n<head>\n<meta charset="UTF-8">\n<meta name="viewport" content="width=device-width, initial-scale=1.0">\n<title>شهادة صناع الأمل</title>\n<style>\n';
+  s += 'body{font-family:Arial;background:#fdf6e3;margin:0;direction:rtl}\n';
+  s += '.container{max-width:1150px;margin:auto;padding:20px}\n';
+  s += 'h1{text-align:center;color:#855E42}\n';
+  s += 'form{background:#fff3e0;padding:20px;border-radius:10px}\n';
+  s += 'label{display:inline-block;margin:5px 0}\n';
+  s += 'input[type="text"],input[type="date"]{padding:5px;width:200px}\n';
+  s += 'table{width:100%;border-collapse:collapse;margin:10px 0}\n';
+  s += 'th,td{border:1px solid #855E42;padding:6px;text-align:center}\n';
+  s += 'th{background:#f5deb3}\n';
+  s += 'button{background:#d9a066;color:#fff;padding:10px 20px;border:none;margin:5px;border-radius:5px;cursor:pointer;font-size:16px}\n';
+  s += '.certificate{width:1123px;height:794px;position:relative;margin:20px auto;display:none;overflow:hidden;background:white;border-radius:15px;box-shadow:0 0 15px rgba(170,130,90,0.4);direction:rtl}\n';
+  s += '.bg{position:absolute;width:100%;height:100%;object-fit:cover;opacity:1;z-index:0}\n';
+  s += '.content{position:absolute;z-index:1;top:16%;left:28%;width:58%;height:60%;box-sizing:border-box;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;text-align:center;direction:rtl;padding:0 10px}\n';
+  s += '.content h2{color:#6B4E71;margin:3px 0;font-size:24px}\n';
+  s += '.content h3{color:#855E42;margin:3px 0;font-size:17px}\n';
+  s += '.student-name{font-size:19px;font-weight:bold;color:#6B4E71;margin:5px 0}\n';
+  s += '.cert-class{font-size:15px;margin:3px 0}\n';
+  s += '.cert-date{font-size:15px;margin:3px 0}\n';
+  s += '.content table{direction:rtl;width:100%;margin:5px 0}\n';
+  s += '.content th,.content td{font-size:12px;padding:3px 4px;direction:rtl;text-align:center;border:1px solid #855E42}\n';
+  s += '.content th{background:rgba(245,222,179,0.7)}\n';
+  s += '.content td{background:rgba(255,255,255,0.5)}\n';
+  s += '.content td.check{color:#2e7d32;font-size:15px;font-weight:bold}\n';
+  s += '.message{padding:2px;white-space:pre-line;font-size:14px;font-weight:bold;color:#6B4E71;line-height:1.6;width:100%;margin:5px 0;direction:rtl;text-align:center}\n';
+  s += '.signature{display:flex;justify-content:space-around;width:100%;direction:rtl;margin-top:auto}\n';
+  s += '.sig-right{text-align:center;font-size:14px}\n';
+  s += '.sig-left{text-align:center;font-size:14px;font-weight:bold}\n';
+  s += '@media print{form,h1,button{display:none!important}.certificate{box-shadow:none;display:block!important;margin:0;border-radius:0}.container{padding:0;max-width:100%}body{background:white}}\n';
+  s += '</style>\n</head>\n<body>\n<div class="container">\n';
+  s += '<h1>نموذج تقييم الطالب - مدرسة بسمة طبعون الابتدائية</h1>\n';
+  s += '<form>\n';
+  s += '<label>اسم الطالب: <input type="text" id="studentName"></label><br>\n';
+  s += '<label>الصف: <input type="text" id="className"></label><br>\n';
+  s += '<label>التاريخ: <input type="date" id="dateField"></label><br>\n';
+  s += '<label>اسم المربي/ة: <input type="text" id="teacherName"></label><br>\n';
+  s += '<table id="evalTable"><thead>\n';
+  s += '<tr><th>الموضوع</th><th colspan="3">المشاركة</th><th colspan="3">إنجاز المهام</th></tr>\n';
+  s += '<tr><th></th><th>كامل</th><th>جزئي</th><th>لا يشارك</th><th>ينفذ بالكامل</th><th>ينفذ جزئيًا</th><th>لا ينفذ</th></tr>\n';
+  s += '</thead><tbody id="evalBody">\n';
+  var subjects = ['اللغة العربية','اللغة العبرية','اللغة الإنجليزية','رياضيات','علوم'];
+  for (var i = 0; i < subjects.length; i++) {
+    s += '<tr><td>' + subjects[i] + '</td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td><td><input type="checkbox"></td></tr>\n';
+  }
+  s += '</tbody></table>\n';
+  s += '<button type="button" onclick="generate()">إنشاء الشهادة</button>\n';
+  s += '<button type="button" onclick="saveAsImage()">حفظ كصورة</button>\n';
+  s += '<button type="button" onclick="savePDF()">تحميل PDF</button>\n';
+  s += '</form>\n';
+  s += '<div id="cert" class="certificate">\n';
+  s += '<img class="bg" src="' + bgData + '">\n';
+  s += '<div class="content">\n';
+  s += '<h2>مدرسة بسمة طبعون الابتدائية</h2>\n';
+  s += '<h3>شهادة صناع الأمل في حرب زئير الأسد للفصل الثاني 2026</h3>\n';
+  s += '<div class="student-name" id="certStudent"></div>\n';
+  s += '<div class="cert-class" id="certClass"></div>\n';
+  s += '<div class="cert-date" id="certDate"></div>\n';
+  s += '<table id="certResult"></table>\n';
+  s += '<div class="message" id="certMsg"></div>\n';
+  s += '<div class="signature">\n';
+  s += '<div class="sig-right"><div>توقيع المربي/ة</div><div id="certTeacher"></div></div>\n';
+  s += '<div class="sig-left"><div>توقيع المديرة</div><div>سلوى نعراني</div></div>\n';
+  s += '</div>\n</div>\n</div>\n</div>\n';
 
-  var html = p.join('\n');
-  var blob = new Blob([html], { type: 'text/html; charset=utf-8' });
-  var a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = 'index.html';
-  a.click();
-  document.getElementById('status').innerText = 'تم إنشاء الملف! اسمه index.html - ارفعيه لريبو roro';
+  // scripts - use separate string to avoid browser parsing issues
+  var sc = 'scr' + 'ipt';
+  s += '<' + sc + ' src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></' + sc + '>\n';
+  s += '<' + sc + ' src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></' + sc + '>\n';
+  s += '<' + sc + '>\n';
+
+  // checkbox radio behavior
+  s += 'document.querySelectorAll("#evalBody tr").forEach(function(row){\n';
+  s += 'var boxes=row.querySelectorAll("input[type=checkbox]");\n';
+  s += 'var a=[boxes[0],boxes[1],boxes[2]],b=[boxes[3],boxes[4],boxes[5]];\n';
+  s += 'a.forEach(function(c){c.onclick=function(){a.forEach(function(x){if(x!==c)x.checked=false})}});\n';
+  s += 'b.forEach(function(c){c.onclick=function(){b.forEach(function(x){if(x!==c)x.checked=false})}});\n';
+  s += '});\n';
+
+  // generate function
+  s += 'function generate(){\n';
+  s += 'var n=document.getElementById("studentName").value;\n';
+  s += 'var c=document.getElementById("className").value;\n';
+  s += 'var d=document.getElementById("dateField").value;\n';
+  s += 'var t=document.getElementById("teacherName").value;\n';
+  s += 'if(!n||!c||!d||!t){alert("الرجاء تعبئة جميع الحقول");return}\n';
+  s += 'document.getElementById("certStudent").innerText="فارس/ة التحدي والإرادة، الطالب/ة: "+n;\n';
+  s += 'document.getElementById("certClass").innerText="الصف: "+c;\n';
+  s += 'document.getElementById("certDate").innerText="التاريخ: "+d;\n';
+  s += 'document.getElementById("certTeacher").innerText=t;\n';
+  s += 'var r=document.getElementById("certResult");\n';
+  s += 'r.innerHTML="<tr><th>الموضوع</th><th colspan=3>المشاركة</th><th colspan=3>إنجاز المهام</th></tr>';
+  s += '<tr><th></th><th>كامل</th><th>جزئي</th><th>لا يشارك</th><th>ينفذ بالكامل</th><th>ينفذ جزئيًا</th><th>لا ينفذ</th></tr>";\n';
+  s += 'document.querySelectorAll("#evalBody tr").forEach(function(row){\n';
+  s += 'var cells=row.querySelectorAll("td");\n';
+  s += 'var boxes=row.querySelectorAll("input[type=checkbox]");\n';
+  s += 'var tr="<tr><td><strong>"+cells[0].innerText+"</strong></td>";\n';
+  s += "for(var i=0;i<6;i++){tr+=boxes[i].checked?'<td class=\"check\">&#10004;</td>':'<td></td>'}\n";
+  s += 'tr+="</tr>";r.innerHTML+=tr});\n';
+  s += 'var m="عزيزي الطالب/ عزيزتي الطالبة\\n\\n";\n';
+  s += 'm+="بإرادتك تثبت أنك أقوى من كل الظروف وأن إصرارك يزرع الأمل.\\n";\n';
+  s += 'm+="اعلم أن مشاركتك عن بعد ليست مجرد متابعة للدراسة، بل هي قصة شجاعة وصمود نحو النجاح.\\n";\n';
+  s += 'm+="لا تتخلَّ عن أحلامك ومستقبلك";\n';
+  s += 'document.getElementById("certMsg").innerText=m;\n';
+  s += 'document.getElementById("cert").style.display="block";\n';
+  s += 'document.getElementById("cert").scrollIntoView({behavior:"smooth"});\n';
+  s += '}\n';
+
+  // save as image - opens in new tab for mobile
+  s += 'function saveAsImage(){\n';
+  s += 'var cert=document.getElementById("cert");\n';
+  s += 'if(cert.style.display==="none"){alert("أنشئ الشهادة أولاً");return}\n';
+  s += 'html2canvas(cert,{scale:2,useCORS:true,allowTaint:true,width:1123,height:794}).then(function(canvas){\n';
+  s += 'var img=canvas.toDataURL("image/png");\n';
+  s += 'var w=window.open("");\n';
+  s += 'if(w){w.document.write("<img src=\\'"+img+"\\' style=\\'max-width:100%\\'>");w.document.close()}\n';
+  s += 'else{var a=document.createElement("a");a.href=img;a.download="شهادة.png";a.click()}\n';
+  s += '})}\n';
+
+  // save as PDF
+  s += 'function savePDF(){\n';
+  s += 'var cert=document.getElementById("cert");\n';
+  s += 'if(cert.style.display==="none"){alert("أنشئ الشهادة أولاً");return}\n';
+  s += 'html2canvas(cert,{scale:2,useCORS:true,allowTaint:true,width:1123,height:794}).then(function(canvas){\n';
+  s += 'var img=canvas.toDataURL("image/jpeg",0.9);\n';
+  s += 'var pdf=new window.jspdf.jsPDF({orientation:"landscape",unit:"px",format:[1123,794]});\n';
+  s += 'pdf.addImage(img,"JPEG",0,0,1123,794);\n';
+  s += 'pdf.save("شهادة.pdf");\n';
+  s += '})}\n';
+
+  s += '</' + sc + '>\n</body>\n</html>';
+  return s;
 }
 </script>
 </body>
