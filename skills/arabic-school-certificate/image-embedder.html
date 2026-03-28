@@ -98,8 +98,8 @@ function generateFile() {
   }
   p.push('</tbody></table>');
   p.push('<button type="button" onclick="generate()">إنشاء الشهادة</button>');
+  p.push('<button type="button" onclick="downloadImage()">حفظ كصورة</button>');
   p.push('<button type="button" onclick="download()">تحميل PDF</button>');
-  p.push('<button type="button" onclick="window.print()">طباعة / حفظ PDF</button>');
   p.push('</form>');
   p.push('<div id="cert" class="certificate">');
   p.push('<img class="bg" src="' + bgData + '">');
@@ -152,17 +152,9 @@ function generateFile() {
   p.push('document.getElementById("cert").style.display="block";');
   p.push('document.getElementById("cert").scrollIntoView({behavior:"smooth"})');
   p.push('}');
-  p.push('function download(){');
-  p.push('var cert=document.getElementById("cert");');
-  p.push('if(cert.style.display==="none"){alert("أنشئ الشهادة أولاً");return}');
-  p.push('var btn=event.target;btn.innerText="جاري التحميل...";btn.disabled=true;');
-  p.push('html2canvas(cert,{scale:2,useCORS:true,allowTaint:true,width:1123,height:794,scrollX:0,scrollY:-window.scrollY}).then(function(canvas){');
-  p.push('try{var imgData=canvas.toDataURL("image/jpeg",0.9);');
-  p.push('var jsPDF=window.jspdf.jsPDF;');
-  p.push('var pdf=new jsPDF({orientation:"landscape",unit:"px",format:[1123,794]});');
-  p.push('pdf.addImage(imgData,"JPEG",0,0,1123,794);');
-  p.push('pdf.save("شهادة الطالب.pdf")}catch(e){var link=document.createElement("a");link.download="شهادة الطالب.png";link.href=canvas.toDataURL("image/png");link.click()}');
-  p.push('btn.innerText="تحميل PDF";btn.disabled=false}).catch(function(){alert("حدث خطأ. جرب من الكمبيوتر.");btn.innerText="تحميل PDF";btn.disabled=false});');
+  p.push('function capturecert(){var cert=document.getElementById("cert");if(cert.style.display==="none"){alert("أنشئ الشهادة أولاً");return Promise.reject()}cert.scrollIntoView({behavior:"auto"});return html2canvas(cert,{scale:2,useCORS:true,allowTaint:true,width:1123,height:794,scrollX:-cert.getBoundingClientRect().left,scrollY:-cert.getBoundingClientRect().top,windowWidth:1200})}');
+  p.push('function downloadImage(){capturecert().then(function(canvas){var dataUrl=canvas.toDataURL("image/png");var newTab=window.open();if(newTab){newTab.document.write("<html><head><title>شهادة</title></head><body style=margin:0;text-align:center;background:#333><img src="+dataUrl+" style=max-width:100%;height:auto></body></html>");newTab.document.close()}else{var link=document.createElement("a");link.download="شهادة_الطالب.png";link.href=dataUrl;document.body.appendChild(link);link.click();document.body.removeChild(link)}})}');
+  p.push('function download(){capturecert().then(function(canvas){try{var imgData=canvas.toDataURL("image/jpeg",0.9);var jsPDF=window.jspdf.jsPDF;var pdf=new jsPDF({orientation:"landscape",unit:"px",format:[1123,794]});pdf.addImage(imgData,"JPEG",0,0,1123,794);pdf.save("شهادة الطالب.pdf")}catch(e){downloadImage()}})}');
   p.push('}');
   p.push('</scr'+'ipt></body></html>');
 

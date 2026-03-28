@@ -129,8 +129,8 @@ button:hover { background: #c48942; }
 </table>
 
 <button type="button" onclick="generate()">إنشاء الشهادة</button>
+<button type="button" onclick="downloadImage()">حفظ كصورة</button>
 <button type="button" onclick="download()">تحميل PDF</button>
-<button type="button" onclick="window.print()">طباعة / حفظ PDF</button>
 </form>
 
 <div id="cert" class="certificate">
@@ -235,21 +235,45 @@ function generate() {
   document.getElementById('cert').scrollIntoView({ behavior: 'smooth' });
 }
 
-function download() {
+function capturecert() {
   var cert = document.getElementById('cert');
-  if (cert.style.display === 'none') { alert('أنشئ الشهادة أولاً'); return; }
-  var btn = event.target;
-  btn.innerText = 'جاري التحميل...';
-  btn.disabled = true;
-  html2canvas(cert, {
+  if (cert.style.display === 'none') { alert('أنشئ الشهادة أولاً'); return Promise.reject(); }
+  // scroll to certificate first
+  cert.scrollIntoView({ behavior: 'auto' });
+  return html2canvas(cert, {
     scale: 2,
     useCORS: true,
     allowTaint: true,
     width: 1123,
     height: 794,
-    scrollX: 0,
-    scrollY: -window.scrollY
-  }).then(function(canvas) {
+    scrollX: -cert.getBoundingClientRect().left,
+    scrollY: -cert.getBoundingClientRect().top,
+    windowWidth: 1200
+  });
+}
+
+function downloadImage() {
+  capturecert().then(function(canvas) {
+    // on mobile: open image in new tab so user can long-press to save
+    var dataUrl = canvas.toDataURL('image/png');
+    var newTab = window.open();
+    if (newTab) {
+      newTab.document.write('<html><head><title>شهادة الطالب</title></head><body style="margin:0;text-align:center;background:#333"><img src="' + dataUrl + '" style="max-width:100%;height:auto"></body></html>');
+      newTab.document.close();
+    } else {
+      // if popup blocked, try download link
+      var link = document.createElement('a');
+      link.download = 'شهادة_الطالب.png';
+      link.href = dataUrl;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+  });
+}
+
+function download() {
+  capturecert().then(function(canvas) {
     try {
       var imgData = canvas.toDataURL('image/jpeg', 0.9);
       var jsPDF = window.jspdf.jsPDF;
@@ -257,18 +281,9 @@ function download() {
       pdf.addImage(imgData, 'JPEG', 0, 0, 1123, 794);
       pdf.save('شهادة الطالب.pdf');
     } catch(e) {
-      // fallback: download as image
-      var link = document.createElement('a');
-      link.download = 'شهادة الطالب.png';
-      link.href = canvas.toDataURL('image/png');
-      link.click();
+      // fallback: open image
+      downloadImage();
     }
-    btn.innerText = 'تحميل PDF';
-    btn.disabled = false;
-  }).catch(function() {
-    alert('حدث خطأ. جرب من الكمبيوتر.');
-    btn.innerText = 'تحميل PDF';
-    btn.disabled = false;
   });
 }
 </script>
