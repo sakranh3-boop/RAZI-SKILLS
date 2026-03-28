@@ -82,10 +82,10 @@ function generateFile() {
   parts.push('.content th { background: rgba(245,222,179,0.7); }');
   parts.push('.content td { background: rgba(255,255,255,0.5); }');
   parts.push('.content td.check { color: #2e7d32; font-size: 16px; font-weight: bold; }');
-  parts.push('.message { padding: 3px; white-space: pre-line; font-size: 14px; font-weight: bold; color: #6B4E71; line-height: 1.4; width: 100%; margin: 3px 0; direction: rtl; text-align: center; }');
+  parts.push('.message { padding: 3px; white-space: pre-line; font-size: 16px; font-weight: bold; color: #6B4E71; line-height: 1.4; width: 100%; margin: 3px 0; direction: rtl; text-align: center; }');
   parts.push('.signature { display: flex; justify-content: space-between; width: 100%; direction: rtl; }');
-  parts.push('.signature div { text-align: center; width: 45%; font-size: 14px; }');
-  parts.push('.sig-name { font-size: 14px; }');
+  parts.push('.sig-right { text-align: center; font-size: 14px; }');
+  parts.push('.sig-left { text-align: center; font-size: 14px; margin-left: 0; margin-right: auto; }');
   parts.push('@media print { form, h1, button { display: none; } .certificate { box-shadow: none; } }');
   parts.push('</style>');
   parts.push('</head>');
@@ -120,8 +120,8 @@ function generateFile() {
   parts.push('<table id="certResult"></table>');
   parts.push('<div class="message" id="certMsg"></div>');
   parts.push('<div class="signature">');
-  parts.push('<div><div class="sig-name">توقيع المربي/ة: <span id="certTeacher"></span></div></div>');
-  parts.push('<div><div class="sig-name">توقيع المديرة: سلوى نعراني</div></div>');
+  parts.push('<div class="sig-right">توقيع المربي/ة: <span id="certTeacher"></span></div>');
+  parts.push('<div class="sig-left">توقيع المديرة: سلوى نعراني</div>');
   parts.push('</div>');
   parts.push('</div>');
   parts.push('</div>');
