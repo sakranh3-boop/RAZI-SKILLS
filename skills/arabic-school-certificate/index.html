@@ -129,8 +129,7 @@ button:hover { background: #c48942; }
 </table>
 
 <button type="button" onclick="generate()">إنشاء الشهادة</button>
-<button type="button" onclick="downloadImage()">حفظ كصورة</button>
-<button type="button" onclick="download()">تحميل PDF</button>
+<button type="button" onclick="saveAsImage()">حفظ كصورة</button>
 </form>
 
 <div id="cert" class="certificate">
@@ -156,6 +155,11 @@ button:hover { background: #c48942; }
 </div>
 </div>
 </div>
+</div>
+
+<div id="savedImage" style="display:none;text-align:center;margin:20px auto;max-width:1123px;">
+<p style="font-size:20px;color:#2e7d32;font-weight:bold;">اضغطي مطولاً على الصورة ← "حفظ الصورة"</p>
+<img id="resultImage" style="width:100%;border:3px solid #d9a066;border-radius:10px;">
 </div>
 
 </div>
@@ -235,55 +239,14 @@ function generate() {
   document.getElementById('cert').scrollIntoView({ behavior: 'smooth' });
 }
 
-function capturecert() {
+function saveAsImage() {
   var cert = document.getElementById('cert');
-  if (cert.style.display === 'none') { alert('أنشئ الشهادة أولاً'); return Promise.reject(); }
-  // scroll to certificate first
-  cert.scrollIntoView({ behavior: 'auto' });
-  return html2canvas(cert, {
-    scale: 2,
-    useCORS: true,
-    allowTaint: true,
-    width: 1123,
-    height: 794,
-    scrollX: -cert.getBoundingClientRect().left,
-    scrollY: -cert.getBoundingClientRect().top,
-    windowWidth: 1200
-  });
-}
-
-function downloadImage() {
-  capturecert().then(function(canvas) {
-    // on mobile: open image in new tab so user can long-press to save
-    var dataUrl = canvas.toDataURL('image/png');
-    var newTab = window.open();
-    if (newTab) {
-      newTab.document.write('<html><head><title>شهادة الطالب</title></head><body style="margin:0;text-align:center;background:#333"><img src="' + dataUrl + '" style="max-width:100%;height:auto"></body></html>');
-      newTab.document.close();
-    } else {
-      // if popup blocked, try download link
-      var link = document.createElement('a');
-      link.download = 'شهادة_الطالب.png';
-      link.href = dataUrl;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    }
-  });
-}
-
-function download() {
-  capturecert().then(function(canvas) {
-    try {
-      var imgData = canvas.toDataURL('image/jpeg', 0.9);
-      var jsPDF = window.jspdf.jsPDF;
-      var pdf = new jsPDF({ orientation: 'landscape', unit: 'px', format: [1123, 794] });
-      pdf.addImage(imgData, 'JPEG', 0, 0, 1123, 794);
-      pdf.save('شهادة الطالب.pdf');
-    } catch(e) {
-      // fallback: open image
-      downloadImage();
-    }
+  if (cert.style.display === 'none') { alert('أنشئ الشهادة أولاً'); return; }
+  html2canvas(cert, { scale: 2, useCORS: true, allowTaint: true }).then(function(canvas) {
+    var img = document.getElementById('resultImage');
+    img.src = canvas.toDataURL('image/png');
+    document.getElementById('savedImage').style.display = 'block';
+    document.getElementById('savedImage').scrollIntoView({ behavior: 'smooth' });
   });
 }
 </script>

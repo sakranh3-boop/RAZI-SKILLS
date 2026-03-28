@@ -134,7 +134,6 @@ function buildHTML() {
   s += '</tbody></table>\n';
   s += '<button type="button" onclick="generate()">إنشاء الشهادة</button>\n';
   s += '<button type="button" onclick="saveAsImage()">حفظ كصورة</button>\n';
-  s += '<button type="button" onclick="savePDF()">تحميل PDF</button>\n';
   s += '</form>\n';
   s += '<div id="cert" class="certificate">\n';
   s += '<img class="bg" src="' + bgData + '">\n';
@@ -149,12 +148,15 @@ function buildHTML() {
   s += '<div class="signature">\n';
   s += '<div class="sig-right"><div>توقيع المربي/ة</div><div id="certTeacher"></div></div>\n';
   s += '<div class="sig-left"><div>توقيع المديرة</div><div>سلوى نعراني</div></div>\n';
-  s += '</div>\n</div>\n</div>\n</div>\n';
+  s += '</div>\n</div>\n</div>\n';
+  s += '<div id="savedImage" style="display:none;text-align:center;margin:20px auto;max-width:1123px;">\n';
+  s += '<p style="font-size:20px;color:#2e7d32;font-weight:bold;">اضغطي مطولاً على الصورة ثم "حفظ الصورة"</p>\n';
+  s += '<img id="resultImage" style="width:100%;border:3px solid #d9a066;border-radius:10px;">\n';
+  s += '</div>\n</div>\n';
 
   // scripts - use separate string to avoid browser parsing issues
   var sc = 'scr' + 'ipt';
   s += '<' + sc + ' src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></' + sc + '>\n';
-  s += '<' + sc + ' src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></' + sc + '>\n';
   s += '<' + sc + '>\n';
 
   // checkbox radio behavior
@@ -194,26 +196,14 @@ function buildHTML() {
   s += 'document.getElementById("cert").scrollIntoView({behavior:"smooth"});\n';
   s += '}\n';
 
-  // save as image - opens in new tab for mobile
+  // save as image - show below certificate
   s += 'function saveAsImage(){\n';
   s += 'var cert=document.getElementById("cert");\n';
   s += 'if(cert.style.display==="none"){alert("أنشئ الشهادة أولاً");return}\n';
-  s += 'html2canvas(cert,{scale:2,useCORS:true,allowTaint:true,width:1123,height:794}).then(function(canvas){\n';
-  s += 'var img=canvas.toDataURL("image/png");\n';
-  s += 'var w=window.open("");\n';
-  s += 'if(w){w.document.write("<img src=\\'"+img+"\\' style=\\'max-width:100%\\'>");w.document.close()}\n';
-  s += 'else{var a=document.createElement("a");a.href=img;a.download="شهادة.png";a.click()}\n';
-  s += '})}\n';
-
-  // save as PDF
-  s += 'function savePDF(){\n';
-  s += 'var cert=document.getElementById("cert");\n';
-  s += 'if(cert.style.display==="none"){alert("أنشئ الشهادة أولاً");return}\n';
-  s += 'html2canvas(cert,{scale:2,useCORS:true,allowTaint:true,width:1123,height:794}).then(function(canvas){\n';
-  s += 'var img=canvas.toDataURL("image/jpeg",0.9);\n';
-  s += 'var pdf=new window.jspdf.jsPDF({orientation:"landscape",unit:"px",format:[1123,794]});\n';
-  s += 'pdf.addImage(img,"JPEG",0,0,1123,794);\n';
-  s += 'pdf.save("شهادة.pdf");\n';
+  s += 'html2canvas(cert,{scale:2,useCORS:true,allowTaint:true}).then(function(canvas){\n';
+  s += 'document.getElementById("resultImage").src=canvas.toDataURL("image/png");\n';
+  s += 'document.getElementById("savedImage").style.display="block";\n';
+  s += 'document.getElementById("savedImage").scrollIntoView({behavior:"smooth"});\n';
   s += '})}\n';
 
   s += '</' + sc + '>\n</body>\n</html>';
