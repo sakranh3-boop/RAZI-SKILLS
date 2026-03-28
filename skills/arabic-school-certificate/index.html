@@ -42,7 +42,7 @@ button:hover { background: #c48942; }
   top: 16%;
   left: 28%;
   width: 58%;
-  height: 60%;
+  height: 65%;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -52,20 +52,20 @@ button:hover { background: #c48942; }
   direction: rtl;
   padding: 0 10px;
 }
-.content h2 { color: #6B4E71; margin: 3px 0; font-size: 24px; }
-.content h3 { color: #855E42; margin: 3px 0; font-size: 17px; }
-.student-name { font-size: 19px; font-weight: bold; color: #6B4E71; margin: 5px 0; }
-.cert-class { font-size: 15px; margin: 3px 0; }
-.cert-date { font-size: 15px; margin: 3px 0; }
+.content h2 { color: #6B4E71; margin: 4px 0; font-size: 28px; }
+.content h3 { color: #855E42; margin: 3px 0; font-size: 19px; }
+.student-name { font-size: 22px; font-weight: bold; color: #6B4E71; margin: 5px 0; }
+.cert-class { font-size: 17px; margin: 3px 0; }
+.cert-date { font-size: 17px; margin: 3px 0; }
 .content table { direction: rtl; width: 100%; margin: 5px 0; }
-.content th, .content td { font-size: 12px; padding: 3px 4px; direction: rtl; text-align: center; border: 1px solid #855E42; }
+.content th, .content td { font-size: 14px; padding: 4px 5px; direction: rtl; text-align: center; border: 1px solid #855E42; }
 .content th { background: rgba(245,222,179,0.7); }
 .content td { background: rgba(255,255,255,0.5); }
-.content td.check { color: #2e7d32; font-size: 15px; font-weight: bold; }
+.content td.check { color: #2e7d32; font-size: 18px; font-weight: bold; }
 .message {
   padding: 2px;
   white-space: pre-line;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: bold;
   color: #6B4E71;
   line-height: 1.6;
@@ -81,8 +81,8 @@ button:hover { background: #c48942; }
   direction: rtl;
   margin-top: auto;
 }
-.sig-right { text-align: center; font-size: 14px; }
-.sig-left { text-align: center; font-size: 14px; font-weight: bold; }
+.sig-right { text-align: center; font-size: 16px; }
+.sig-left { text-align: center; font-size: 16px; font-weight: bold; }
 
 @media print {
   form, h1, button, .saved-note { display: none !important; }
@@ -130,6 +130,7 @@ button:hover { background: #c48942; }
 
 <button type="button" onclick="generate()">إنشاء الشهادة</button>
 <button type="button" onclick="saveAsImage()">حفظ كصورة</button>
+<button type="button" onclick="savePDF()">تحميل PDF</button>
 </form>
 
 <div id="cert" class="certificate">
@@ -237,6 +238,17 @@ function generate() {
 
   document.getElementById('cert').style.display = 'block';
   document.getElementById('cert').scrollIntoView({ behavior: 'smooth' });
+}
+
+function savePDF() {
+  var cert = document.getElementById('cert');
+  if (cert.style.display === 'none') { alert('أنشئ الشهادة أولاً'); return; }
+  html2canvas(cert, { scale: 2, useCORS: true, allowTaint: true }).then(function(canvas) {
+    var img = canvas.toDataURL('image/jpeg', 0.9);
+    var pdf = new window.jspdf.jsPDF({ orientation: 'landscape', unit: 'px', format: [1123, 794] });
+    pdf.addImage(img, 'JPEG', 0, 0, 1123, 794);
+    pdf.save('شهادة_الطالب.pdf');
+  });
 }
 
 function saveAsImage() {
