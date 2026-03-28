@@ -12,23 +12,15 @@ input { margin: 10px 0; }
 button { background: #d9a066; color: white; border: none; padding: 15px 30px; font-size: 18px; border-radius: 8px; cursor: pointer; margin-top: 20px; }
 button:hover { background: #c48942; }
 .status { margin-top: 15px; color: #2e7d32; font-weight: bold; }
-img.preview { max-width: 150px; margin: 10px; border: 2px solid #ccc; border-radius: 8px; }
+img.preview { max-width: 200px; margin: 10px; border: 2px solid #ccc; border-radius: 8px; }
 </style>
 </head>
 <body>
 <div class="box">
-<h1>أداة تضمين الصور في الشهادة</h1>
-<p>ارفعي الصورتين ثم اضغطي الزر لتحميل ملف الشهادة النهائي</p>
+<h1>أداة تضمين خلفية الشهادة</h1>
+<p>ارفعي صورة الخلفية ثم اضغطي الزر لتحميل ملف الشهادة النهائي</p>
 
-<label>1. لوجو المدرسة:</label>
-<input type="file" id="logoFile" accept="image/*">
-<img id="logoPreview" class="preview" style="display:none">
-
-<label>2. لوجو وزارة التربية والتعليم:</label>
-<input type="file" id="ministryFile" accept="image/*">
-<img id="ministryPreview" class="preview" style="display:none">
-
-<label>3. خلفية الشهادة:</label>
+<label>خلفية الشهادة:</label>
 <input type="file" id="bgFile" accept="image/*">
 <img id="bgPreview" class="preview" style="display:none">
 
@@ -38,33 +30,7 @@ img.preview { max-width: 150px; margin: 10px; border: 2px solid #ccc; border-rad
 </div>
 
 <script>
-var logoData = '';
-var ministryData = '';
 var bgData = '';
-
-document.getElementById('logoFile').addEventListener('change', function(e) {
-  var file = e.target.files[0];
-  if (!file) return;
-  var reader = new FileReader();
-  reader.onload = function(ev) {
-    logoData = ev.target.result;
-    document.getElementById('logoPreview').src = logoData;
-    document.getElementById('logoPreview').style.display = 'inline';
-  };
-  reader.readAsDataURL(file);
-});
-
-document.getElementById('ministryFile').addEventListener('change', function(e) {
-  var file = e.target.files[0];
-  if (!file) return;
-  var reader = new FileReader();
-  reader.onload = function(ev) {
-    ministryData = ev.target.result;
-    document.getElementById('ministryPreview').src = ministryData;
-    document.getElementById('ministryPreview').style.display = 'inline';
-  };
-  reader.readAsDataURL(file);
-});
 
 document.getElementById('bgFile').addEventListener('change', function(e) {
   var file = e.target.files[0];
@@ -79,8 +45,8 @@ document.getElementById('bgFile').addEventListener('change', function(e) {
 });
 
 function generateFile() {
-  if (!logoData || !ministryData || !bgData) {
-    alert('الرجاء رفع جميع الصور أولاً');
+  if (!bgData) {
+    alert('الرجاء رفع صورة الخلفية أولاً');
     return;
   }
 
@@ -103,23 +69,23 @@ function generateFile() {
   parts.push('th { background: #f5deb3; }');
   parts.push('button { background: #d9a066; color: #fff; padding: 10px 20px; border: none; margin: 5px; border-radius: 5px; cursor: pointer; font-size: 16px; }');
   parts.push('button:hover { background: #c48942; }');
-  parts.push('.certificate { width: 1123px; height: 794px; position: relative; margin: 20px auto; display: none; overflow: hidden; background: #fff8e1; border-radius: 15px; box-shadow: 0 0 15px rgba(170,130,90,0.4); direction: rtl; }');
-  parts.push('.bg { position: absolute; width: 100%; height: 100%; object-fit: cover; opacity: 0.25; z-index: 0; }');
-  parts.push('.logo { position: absolute; top: 15px; left: 15px; width: 90px; height: 90px; object-fit: contain; z-index: 2; mix-blend-mode: multiply; }');
-  parts.push('.logo-ministry { position: absolute; top: 15px; right: 15px; width: 90px; height: 90px; object-fit: contain; z-index: 2; mix-blend-mode: multiply; }');
-  parts.push('.content { position: relative; z-index: 1; padding: 15px 30px; height: 100%; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; justify-content: space-between; text-align: center; direction: rtl; }');
-  parts.push('.content h2 { color: #6B4E71; margin: 8px 0; font-size: 30px; }');
-  parts.push('.content h3 { color: #855E42; margin: 6px 0; font-size: 22px; }');
-  parts.push('.student-name { font-size: 24px; font-weight: bold; color: #6B4E71; margin: 8px 0; }');
-  parts.push('.cert-class { font-size: 18px; margin: 6px 0; }');
-  parts.push('.cert-date { font-size: 18px; margin: 6px 0; }');
-  parts.push('.content table { background: rgba(255,255,255,0.7); direction: rtl; width: 95%; }');
-  parts.push('.content th, .content td { font-size: 16px; padding: 6px 8px; direction: rtl; text-align: center; }');
-  parts.push('.content td.check { color: #2e7d32; font-size: 22px; font-weight: bold; }');
-  parts.push('.message { padding: 8px; white-space: pre-line; font-size: 18px; font-weight: bold; color: #6B4E71; line-height: 1.5; width: 90%; margin: 10px 0; direction: rtl; text-align: center; }');
-  parts.push('.signature { display: flex; justify-content: space-between; width: 100%; padding-bottom: 15px; direction: rtl; }');
-  parts.push('.signature div { text-align: center; width: 250px; font-size: 16px; }');
-  parts.push('.line { border-top: 2px solid #855E42; margin-top: 10px; }');
+  parts.push('.certificate { width: 1123px; height: 794px; position: relative; margin: 20px auto; display: none; overflow: hidden; background: white; border-radius: 15px; box-shadow: 0 0 15px rgba(170,130,90,0.4); direction: rtl; }');
+  parts.push('.bg { position: absolute; width: 100%; height: 100%; object-fit: cover; opacity: 1; z-index: 0; }');
+  parts.push('.content { position: absolute; z-index: 1; top: 10px; right: 30px; width: 55%; height: 95%; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; justify-content: space-between; text-align: center; direction: rtl; padding: 10px 15px; }');
+  parts.push('.content h2 { color: #6B4E71; margin: 5px 0; font-size: 26px; }');
+  parts.push('.content h3 { color: #855E42; margin: 4px 0; font-size: 18px; }');
+  parts.push('.student-name { font-size: 20px; font-weight: bold; color: #6B4E71; margin: 5px 0; }');
+  parts.push('.cert-class { font-size: 16px; margin: 4px 0; }');
+  parts.push('.cert-date { font-size: 16px; margin: 4px 0; }');
+  parts.push('.content table { direction: rtl; width: 100%; }');
+  parts.push('.content th, .content td { font-size: 13px; padding: 4px 5px; direction: rtl; text-align: center; border: 1px solid #855E42; }');
+  parts.push('.content th { background: rgba(245,222,179,0.7); }');
+  parts.push('.content td { background: rgba(255,255,255,0.5); }');
+  parts.push('.content td.check { color: #2e7d32; font-size: 18px; font-weight: bold; }');
+  parts.push('.message { padding: 5px; white-space: pre-line; font-size: 14px; font-weight: bold; color: #6B4E71; line-height: 1.4; width: 100%; margin: 5px 0; direction: rtl; text-align: center; }');
+  parts.push('.signature { display: flex; justify-content: space-between; width: 100%; padding-bottom: 10px; direction: rtl; }');
+  parts.push('.signature div { text-align: center; width: 45%; font-size: 14px; }');
+  parts.push('.line { border-top: 2px solid #855E42; margin-top: 8px; }');
   parts.push('@media print { form, h1, button { display: none; } .certificate { box-shadow: none; } }');
   parts.push('</style>');
   parts.push('</head>');
@@ -145,8 +111,6 @@ function generateFile() {
   parts.push('</form>');
   parts.push('<div id="cert" class="certificate">');
   parts.push('<img class="bg" src="' + bgData + '">');
-  parts.push('<img class="logo" src="' + logoData + '">');
-  parts.push('<img class="logo-ministry" src="' + ministryData + '">');
   parts.push('<div class="content">');
   parts.push('<h2>مدرسة بسمة طبعون الابتدائية</h2>');
   parts.push('<h3>شهادة صناع الأمل في حرب زئير الأسد للفصل الثاني 2026</h3>');
@@ -163,7 +127,6 @@ function generateFile() {
   parts.push('</div>');
   parts.push('</div>');
 
-  // Script tags split to avoid browser parsing issues
   parts.push('<scr' + 'ipt src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></scr' + 'ipt>');
   parts.push('<scr' + 'ipt src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></scr' + 'ipt>');
   parts.push('<scr' + 'ipt>');

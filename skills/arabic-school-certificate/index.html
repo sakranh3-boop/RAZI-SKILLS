@@ -6,7 +6,7 @@
 <title>شهادة صناع الأمل</title>
 <style>
 body { font-family: Arial; background: #fdf6e3; margin: 0; direction: rtl; }
-.container { max-width: 900px; margin: auto; padding: 20px; }
+.container { max-width: 1150px; margin: auto; padding: 20px; }
 h1 { text-align: center; color: #855E42; }
 form { background: #fff3e0; padding: 20px; border-radius: 10px; }
 label { display: inline-block; margin: 5px 0; }
@@ -24,7 +24,7 @@ button:hover { background: #c48942; }
   margin: 20px auto;
   display: none;
   overflow: hidden;
-  background: #fff8e1;
+  background: white;
   border-radius: 15px;
   box-shadow: 0 0 15px rgba(170,130,90,0.4);
   direction: rtl;
@@ -33,30 +33,17 @@ button:hover { background: #c48942; }
   position: absolute;
   width: 100%; height: 100%;
   object-fit: cover;
-  opacity: 0.25;
+  opacity: 1;
   z-index: 0;
 }
-.logo {
-  position: absolute;
-  top: 15px; left: 15px;
-  width: 90px; height: 90px;
-  object-fit: contain;
-  z-index: 2;
-  mix-blend-mode: multiply;
-}
-.logo-ministry {
-  position: absolute;
-  top: 15px; right: 15px;
-  width: 90px; height: 90px;
-  object-fit: contain;
-  z-index: 2;
-  mix-blend-mode: multiply;
-}
+/* المحتوى في المنطقة البيضاء - الجزء الأيمن العلوي من الصورة */
 .content {
-  position: relative;
+  position: absolute;
   z-index: 1;
-  padding: 15px 30px;
-  height: 100%;
+  top: 10px;
+  right: 30px;
+  width: 55%;
+  height: 95%;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -64,24 +51,27 @@ button:hover { background: #c48942; }
   justify-content: space-between;
   text-align: center;
   direction: rtl;
+  padding: 10px 15px;
 }
-.content h2 { color: #6B4E71; margin: 8px 0; font-size: 30px; }
-.content h3 { color: #855E42; margin: 6px 0; font-size: 22px; }
-.student-name { font-size: 24px; font-weight: bold; color: #6B4E71; margin: 8px 0; }
-.cert-class { font-size: 18px; margin: 6px 0; }
-.cert-date { font-size: 18px; margin: 6px 0; }
-.content table { background: rgba(255,255,255,0.7); direction: rtl; width: 95%; }
-.content th, .content td { font-size: 16px; padding: 6px 8px; direction: rtl; text-align: center; }
-.content td.check { color: #2e7d32; font-size: 22px; font-weight: bold; }
+.content h2 { color: #6B4E71; margin: 5px 0; font-size: 26px; }
+.content h3 { color: #855E42; margin: 4px 0; font-size: 18px; }
+.student-name { font-size: 20px; font-weight: bold; color: #6B4E71; margin: 5px 0; }
+.cert-class { font-size: 16px; margin: 4px 0; }
+.cert-date { font-size: 16px; margin: 4px 0; }
+.content table { direction: rtl; width: 100%; }
+.content th, .content td { font-size: 13px; padding: 4px 5px; direction: rtl; text-align: center; border: 1px solid #855E42; }
+.content th { background: rgba(245,222,179,0.7); }
+.content td { background: rgba(255,255,255,0.5); }
+.content td.check { color: #2e7d32; font-size: 18px; font-weight: bold; }
 .message {
-  padding: 8px;
+  padding: 5px;
   white-space: pre-line;
-  font-size: 18px;
+  font-size: 14px;
   font-weight: bold;
   color: #6B4E71;
-  line-height: 1.5;
-  width: 90%;
-  margin: 10px 0;
+  line-height: 1.4;
+  width: 100%;
+  margin: 5px 0;
   direction: rtl;
   text-align: center;
 }
@@ -89,12 +79,11 @@ button:hover { background: #c48942; }
   display: flex;
   justify-content: space-between;
   width: 100%;
-  margin-top: auto;
-  padding-bottom: 15px;
+  padding-bottom: 10px;
   direction: rtl;
 }
-.signature div { text-align: center; width: 250px; font-size: 16px; }
-.line { border-top: 2px solid #855E42; margin-top: 10px; }
+.signature div { text-align: center; width: 45%; font-size: 14px; }
+.line { border-top: 2px solid #855E42; margin-top: 8px; }
 
 @media print {
   form, h1, button, .saved-note { display: none; }
@@ -107,15 +96,13 @@ button:hover { background: #c48942; }
 
 <h1>نموذج تقييم الطالب - مدرسة بسمة طبعون الابتدائية</h1>
 
-<div class="saved-note" id="savedNote">تم حفظ الصور! ستظهر تلقائيًا في كل شهادة.</div>
+<div class="saved-note" id="savedNote">تم حفظ الخلفية! ستظهر تلقائيًا في كل شهادة.</div>
 
 <form>
 <label>اسم الطالب: <input type="text" id="studentName"></label><br>
 <label>الصف: <input type="text" id="className"></label><br>
 <label>التاريخ: <input type="date" id="dateField"></label><br>
 <label>اسم المربي/ة: <input type="text" id="teacherName"></label><br>
-<label>لوجو المدرسة (مرة واحدة): <input type="file" id="logoInput" accept="image/*"></label><br>
-<label>لوجو وزارة التربية (مرة واحدة): <input type="file" id="ministryInput" accept="image/*"></label><br>
 <label>خلفية الشهادة (مرة واحدة): <input type="file" id="bgInput" accept="image/*"></label><br>
 
 <table id="evalTable">
@@ -146,8 +133,6 @@ button:hover { background: #c48942; }
 
 <div id="cert" class="certificate">
 <img id="certBg" class="bg" src="">
-<img id="certLogo" class="logo" src="">
-<img id="certMinistry" class="logo-ministry" src="">
 
 <div class="content">
 <h2>مدرسة بسمة طبعون الابتدائية</h2>
@@ -179,34 +164,25 @@ button:hover { background: #c48942; }
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
-// حفظ وتحميل الصور من localStorage
+// حفظ وتحميل الخلفية من localStorage
 function saveImage(file, key) {
   var reader = new FileReader();
   reader.onload = function(e) {
     localStorage.setItem(key, e.target.result);
-    var elMap = { 'logo': 'certLogo', 'ministry': 'certMinistry', 'bg': 'certBg' };
-    document.getElementById(elMap[key]).src = e.target.result;
+    document.getElementById('certBg').src = e.target.result;
     document.getElementById('savedNote').style.display = 'block';
   };
   reader.readAsDataURL(file);
 }
 
 window.addEventListener('load', function() {
-  var logo = localStorage.getItem('logo');
-  var ministry = localStorage.getItem('ministry');
   var bg = localStorage.getItem('bg');
-  if (logo) document.getElementById('certLogo').src = logo;
-  if (ministry) document.getElementById('certMinistry').src = ministry;
-  if (bg) document.getElementById('certBg').src = bg;
-  if (logo || ministry || bg) document.getElementById('savedNote').style.display = 'block';
+  if (bg) {
+    document.getElementById('certBg').src = bg;
+    document.getElementById('savedNote').style.display = 'block';
+  }
 });
 
-document.getElementById('logoInput').addEventListener('change', function(e) {
-  if (e.target.files[0]) saveImage(e.target.files[0], 'logo');
-});
-document.getElementById('ministryInput').addEventListener('change', function(e) {
-  if (e.target.files[0]) saveImage(e.target.files[0], 'ministry');
-});
 document.getElementById('bgInput').addEventListener('change', function(e) {
   if (e.target.files[0]) saveImage(e.target.files[0], 'bg');
 });
@@ -228,22 +204,13 @@ function generate() {
 
   if (!name || !cls || !dt || !teacher) { alert('الرجاء تعبئة جميع الحقول'); return; }
 
-  // تحميل الصور المحفوظة
-  var logo = localStorage.getItem('logo');
-  var ministry = localStorage.getItem('ministry');
   var bg = localStorage.getItem('bg');
-  if (logo) document.getElementById('certLogo').src = logo;
-  if (ministry) document.getElementById('certMinistry').src = ministry;
   if (bg) document.getElementById('certBg').src = bg;
 
   document.getElementById('certStudent').innerText = 'فارس/ة التحدي والإرادة، الطالب/ة: ' + name;
   document.getElementById('certClass').innerText = 'الصف: ' + cls;
   document.getElementById('certDate').innerText = 'التاريخ: ' + dt;
   document.getElementById('certTeacher').innerText = teacher;
-
-  // جدول الشهادة مع علامات صح
-  var partLabels = ['كامل', 'جزئي', 'لا يشارك'];
-  var taskLabels = ['ينفذ بالكامل', 'ينفذ جزئيًا', 'لا ينفذ'];
 
   var result = document.getElementById('certResult');
   result.innerHTML =
@@ -262,30 +229,13 @@ function generate() {
     var cells = row.querySelectorAll('td');
     var boxes = row.querySelectorAll('input[type="checkbox"]');
     var tr = '<tr><td><strong>' + cells[0].innerText + '</strong></td>';
-
-    // المشاركة - 3 أعمدة مع علامة صح
-    for (var i = 0; i < 3; i++) {
-      if (boxes[i].checked) {
-        tr += '<td class="check">&#10004;</td>';
-      } else {
-        tr += '<td></td>';
-      }
+    for (var i = 0; i < 6; i++) {
+      tr += boxes[i].checked ? '<td class="check">&#10004;</td>' : '<td></td>';
     }
-
-    // إنجاز المهام - 3 أعمدة مع علامة صح
-    for (var j = 3; j < 6; j++) {
-      if (boxes[j].checked) {
-        tr += '<td class="check">&#10004;</td>';
-      } else {
-        tr += '<td></td>';
-      }
-    }
-
     tr += '</tr>';
     result.innerHTML += tr;
   });
 
-  // الرسالة الثابتة لكل الطلاب
   document.getElementById('certMsg').innerText =
     'عزيزي الطالب/ عزيزتي الطالبة\n' +
     'بإرادتك تثبت أنك أقوى من كل الظروف وأن إصرارك يزرع الأمل.\n' +
