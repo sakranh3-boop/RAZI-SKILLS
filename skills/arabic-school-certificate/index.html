@@ -36,14 +36,14 @@ button:hover { background: #c48942; }
   opacity: 1;
   z-index: 0;
 }
-/* المحتوى في المنطقة البيضاء - بعيد عن الولد والميدالية */
+/* المحتوى في المنطقة البيضاء */
 .content {
   position: absolute;
   z-index: 1;
-  top: 13%;
+  top: 18%;
   left: 35%;
   width: 60%;
-  height: 62%;
+  height: 72%;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -82,9 +82,7 @@ button:hover { background: #c48942; }
   direction: rtl;
 }
 .signature div { text-align: center; width: 45%; font-size: 12px; }
-.sig-label { font-weight: bold; margin-bottom: 3px; }
-.line { border-top: 2px solid #855E42; margin-top: 0; width: 80%; margin-left: auto; margin-right: auto; }
-.sig-name { margin-top: 3px; font-size: 12px; }
+.sig-name { font-size: 12px; }
 
 @media print {
   form, h1, button, .saved-note { display: none; }
@@ -147,14 +145,10 @@ button:hover { background: #c48942; }
 
 <div class="signature">
 <div>
-<div class="sig-label">توقيع المربي/ة</div>
-<div class="line"></div>
-<div class="sig-name" id="certTeacher"></div>
+<div class="sig-name">توقيع المربي/ة: <span id="certTeacher"></span></div>
 </div>
 <div>
-<div class="sig-label">توقيع المديرة</div>
-<div class="line"></div>
-<div class="sig-name">سلوى نعراني</div>
+<div class="sig-name">توقيع المديرة: سلوى نعراني</div>
 </div>
 </div>
 </div>

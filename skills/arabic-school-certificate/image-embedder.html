@@ -71,7 +71,7 @@ function generateFile() {
   parts.push('button:hover { background: #c48942; }');
   parts.push('.certificate { width: 1123px; height: 794px; position: relative; margin: 20px auto; display: none; overflow: hidden; background: white; border-radius: 15px; box-shadow: 0 0 15px rgba(170,130,90,0.4); direction: rtl; }');
   parts.push('.bg { position: absolute; width: 100%; height: 100%; object-fit: cover; opacity: 1; z-index: 0; }');
-  parts.push('.content { position: absolute; z-index: 1; top: 13%; left: 35%; width: 60%; height: 62%; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; justify-content: space-between; text-align: center; direction: rtl; padding: 5px 10px; }');
+  parts.push('.content { position: absolute; z-index: 1; top: 18%; left: 35%; width: 60%; height: 72%; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; justify-content: space-between; text-align: center; direction: rtl; padding: 5px 10px; }');
   parts.push('.content h2 { color: #6B4E71; margin: 3px 0; font-size: 22px; }');
   parts.push('.content h3 { color: #855E42; margin: 2px 0; font-size: 15px; }');
   parts.push('.student-name { font-size: 17px; font-weight: bold; color: #6B4E71; margin: 3px 0; }');
@@ -85,9 +85,7 @@ function generateFile() {
   parts.push('.message { padding: 3px; white-space: pre-line; font-size: 11px; font-weight: bold; color: #6B4E71; line-height: 1.3; width: 100%; margin: 3px 0; direction: rtl; text-align: center; }');
   parts.push('.signature { display: flex; justify-content: space-between; width: 100%; direction: rtl; }');
   parts.push('.signature div { text-align: center; width: 45%; font-size: 12px; }');
-  parts.push('.sig-label { font-weight: bold; margin-bottom: 3px; }');
-  parts.push('.line { border-top: 2px solid #855E42; margin-top: 0; width: 80%; margin-left: auto; margin-right: auto; }');
-  parts.push('.sig-name { margin-top: 3px; font-size: 12px; }');
+  parts.push('.sig-name { font-size: 12px; }');
   parts.push('@media print { form, h1, button { display: none; } .certificate { box-shadow: none; } }');
   parts.push('</style>');
   parts.push('</head>');
@@ -122,8 +120,8 @@ function generateFile() {
   parts.push('<table id="certResult"></table>');
   parts.push('<div class="message" id="certMsg"></div>');
   parts.push('<div class="signature">');
-  parts.push('<div><div class="sig-label">توقيع المربي/ة</div><div class="line"></div><div class="sig-name" id="certTeacher"></div></div>');
-  parts.push('<div><div class="sig-label">توقيع المديرة</div><div class="line"></div><div class="sig-name">سلوى نعراني</div></div>');
+  parts.push('<div><div class="sig-name">توقيع المربي/ة: <span id="certTeacher"></span></div></div>');
+  parts.push('<div><div class="sig-name">توقيع المديرة: سلوى نعراني</div></div>');
   parts.push('</div>');
   parts.push('</div>');
   parts.push('</div>');
