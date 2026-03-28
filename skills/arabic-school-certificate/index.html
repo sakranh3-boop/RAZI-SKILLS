@@ -40,7 +40,7 @@ button:hover { background: #c48942; }
   position: absolute;
   z-index: 1;
   top: 16%;
-  left: 35%;
+  left: 20%;
   width: 58%;
   height: 48%;
   box-sizing: border-box;
@@ -81,15 +81,17 @@ button:hover { background: #c48942; }
   direction: rtl;
   position: absolute;
   bottom: 18%;
-  left: 35%;
+  left: 20%;
   z-index: 1;
 }
 .sig-right { text-align: center; font-size: 14px; }
 .sig-left { text-align: center; font-size: 14px; font-weight: bold; }
 
 @media print {
-  form, h1, button, .saved-note { display: none; }
-  .certificate { box-shadow: none; }
+  form, h1, button, .saved-note { display: none !important; }
+  .certificate { box-shadow: none; display: block !important; margin: 0; border-radius: 0; }
+  .container { padding: 0; max-width: 100%; }
+  body { background: white; }
 }
 </style>
 </head>
@@ -131,6 +133,7 @@ button:hover { background: #c48942; }
 
 <button type="button" onclick="generate()">إنشاء الشهادة</button>
 <button type="button" onclick="download()">تحميل PDF</button>
+<button type="button" onclick="window.print()">طباعة / حفظ PDF</button>
 </form>
 
 <div id="cert" class="certificate">
