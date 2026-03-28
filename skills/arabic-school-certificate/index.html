@@ -39,10 +39,10 @@ button:hover { background: #c48942; }
 .content {
   position: absolute;
   z-index: 1;
-  top: 18%;
+  top: 16%;
   left: 35%;
   width: 58%;
-  height: 55%;
+  height: 48%;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -80,7 +80,7 @@ button:hover { background: #c48942; }
   width: 58%;
   direction: rtl;
   position: absolute;
-  bottom: 12%;
+  bottom: 18%;
   left: 35%;
   z-index: 1;
 }
@@ -240,18 +240,37 @@ function generate() {
 function download() {
   var cert = document.getElementById('cert');
   if (cert.style.display === 'none') { alert('أنشئ الشهادة أولاً'); return; }
+  var btn = event.target;
+  btn.innerText = 'جاري التحميل...';
+  btn.disabled = true;
   html2canvas(cert, {
     scale: 2,
     useCORS: true,
     allowTaint: true,
     width: 1123,
-    height: 794
+    height: 794,
+    scrollX: 0,
+    scrollY: -window.scrollY
   }).then(function(canvas) {
-    var imgData = canvas.toDataURL('image/jpeg', 0.95);
-    var jsPDF = window.jspdf.jsPDF;
-    var pdf = new jsPDF({ orientation: 'landscape', unit: 'px', format: [1123, 794] });
-    pdf.addImage(imgData, 'JPEG', 0, 0, 1123, 794);
-    pdf.save('شهادة الطالب.pdf');
+    try {
+      var imgData = canvas.toDataURL('image/jpeg', 0.9);
+      var jsPDF = window.jspdf.jsPDF;
+      var pdf = new jsPDF({ orientation: 'landscape', unit: 'px', format: [1123, 794] });
+      pdf.addImage(imgData, 'JPEG', 0, 0, 1123, 794);
+      pdf.save('شهادة الطالب.pdf');
+    } catch(e) {
+      // fallback: download as image
+      var link = document.createElement('a');
+      link.download = 'شهادة الطالب.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    }
+    btn.innerText = 'تحميل PDF';
+    btn.disabled = false;
+  }).catch(function() {
+    alert('حدث خطأ. جرب من الكمبيوتر.');
+    btn.innerText = 'تحميل PDF';
+    btn.disabled = false;
   });
 }
 </script>
