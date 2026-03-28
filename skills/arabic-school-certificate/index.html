@@ -36,15 +36,14 @@ button:hover { background: #c48942; }
   opacity: 1;
   z-index: 0;
 }
-/* المحتوى في المنطقة البيضاء الوسطى - بعيد عن الولد والميدالية */
+/* المحتوى في المنطقة البيضاء - بعيد عن الولد والميدالية */
 .content {
   position: absolute;
   z-index: 1;
-  top: 14%;
-  left: 22%;
-  right: 5%;
-  width: 73%;
-  height: 68%;
+  top: 13%;
+  left: 35%;
+  width: 60%;
+  height: 62%;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -52,27 +51,27 @@ button:hover { background: #c48942; }
   justify-content: space-between;
   text-align: center;
   direction: rtl;
-  padding: 5px 15px;
+  padding: 5px 10px;
 }
-.content h2 { color: #6B4E71; margin: 5px 0; font-size: 26px; }
-.content h3 { color: #855E42; margin: 4px 0; font-size: 18px; }
-.student-name { font-size: 20px; font-weight: bold; color: #6B4E71; margin: 5px 0; }
-.cert-class { font-size: 16px; margin: 4px 0; }
-.cert-date { font-size: 16px; margin: 4px 0; }
+.content h2 { color: #6B4E71; margin: 3px 0; font-size: 22px; }
+.content h3 { color: #855E42; margin: 2px 0; font-size: 15px; }
+.student-name { font-size: 17px; font-weight: bold; color: #6B4E71; margin: 3px 0; }
+.cert-class { font-size: 14px; margin: 2px 0; }
+.cert-date { font-size: 14px; margin: 2px 0; }
 .content table { direction: rtl; width: 100%; }
-.content th, .content td { font-size: 11px; padding: 3px 4px; direction: rtl; text-align: center; border: 1px solid #855E42; }
+.content th, .content td { font-size: 10px; padding: 2px 3px; direction: rtl; text-align: center; border: 1px solid #855E42; }
 .content th { background: rgba(245,222,179,0.7); }
 .content td { background: rgba(255,255,255,0.5); }
-.content td.check { color: #2e7d32; font-size: 15px; font-weight: bold; }
+.content td.check { color: #2e7d32; font-size: 14px; font-weight: bold; }
 .message {
-  padding: 5px;
+  padding: 3px;
   white-space: pre-line;
-  font-size: 14px;
+  font-size: 11px;
   font-weight: bold;
   color: #6B4E71;
-  line-height: 1.4;
+  line-height: 1.3;
   width: 100%;
-  margin: 5px 0;
+  margin: 3px 0;
   direction: rtl;
   text-align: center;
 }
@@ -82,8 +81,10 @@ button:hover { background: #c48942; }
   width: 100%;
   direction: rtl;
 }
-.signature div { text-align: center; width: 45%; font-size: 13px; }
-.line { border-top: 2px solid #855E42; margin-top: 5px; width: 100%; }
+.signature div { text-align: center; width: 45%; font-size: 12px; }
+.sig-label { font-weight: bold; margin-bottom: 3px; }
+.line { border-top: 2px solid #855E42; margin-top: 0; width: 80%; margin-left: auto; margin-right: auto; }
+.sig-name { margin-top: 3px; font-size: 12px; }
 
 @media print {
   form, h1, button, .saved-note { display: none; }
@@ -146,14 +147,14 @@ button:hover { background: #c48942; }
 
 <div class="signature">
 <div>
-<strong>توقيع المربي/ة</strong>
+<div class="sig-label">توقيع المربي/ة</div>
 <div class="line"></div>
-<div id="certTeacher"></div>
+<div class="sig-name" id="certTeacher"></div>
 </div>
 <div>
-<strong>توقيع المديرة</strong>
+<div class="sig-label">توقيع المديرة</div>
 <div class="line"></div>
-سلوى نعراني
+<div class="sig-name">سلوى نعراني</div>
 </div>
 </div>
 </div>
